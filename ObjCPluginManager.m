@@ -57,7 +57,7 @@
 	}
 }
 
--(NSArray *)pluginsForProperty:(NSString *)property forBookmark:(Bookmark *)bk withValue:(id)value
+-(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
 {
 	if (!_plugins) [self build];
 	NSArray *plugins = [_plugins objectForKey:property];
@@ -68,22 +68,22 @@
 	NSMutableArray *ret = [NSMutableArray array];
 	while (plugin = [pluginEnumerator nextObject])
 	{
-		if ([plugin actionEnableForBookmark:bk withValue:value]) 
+		if ([plugin actionEnableForValue:forValue withValue:withValue]) 
 			[ret addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-				[plugin actionTitleForBookmark:bk withValue:value], @"title",
+				[plugin actionTitleForValue:forValue withValue:withValue], @"title",
 				plugin, @"plugin",
-				bk, @"bookmark",
-				value, @"value",
+				forValue, @"forValue",
+				withValue, @"value",
 				nil]];
 	}
 	
 	return ret;
 }
 
--(void)runPlugin:(NSDictionary *)plugin forBookmark:(Bookmark *)bk withValue:(id)value
+-(void)runPlugin:(NSDictionary *)plugin forValue:(id)forValue withValue:(id)value
 {
 	id p = [plugin objectForKey:@"plugin"];
-	[p actionPerformForBookmark:bk withValue:value];
+	[p actionPerformForValue:forValue withValue:value];
 }
 
 -(id)runScriptAtPath:(NSString *)path
