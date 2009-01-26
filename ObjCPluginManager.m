@@ -11,6 +11,12 @@
 
 @implementation ObjCPluginManager
 
++(void)load {
+	NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	[PluginManager registerManager:[[self new] autorelease]];
+	[pool release];
+}
+
 -(NSString *)name { return @"Objective-C"; }
 -(NSArray *)extensions { return [NSArray arrayWithObject:@"bundle"]; }
 
