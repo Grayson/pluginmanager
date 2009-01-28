@@ -6,10 +6,10 @@
 //  Copyright 2006 From Concentrate Software. All rights reserved.
 //
 
-#import "ObjCPluginManager.h"
+#import "NuPluginManager.h"
 
 
-@implementation ObjCPluginManager
+@implementation NuPluginManager
 
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
@@ -17,8 +17,8 @@
 	[pool release];
 }
 
--(NSString *)name { return @"Objective-C"; }
--(NSArray *)extensions { return [NSArray arrayWithObject:@"bundle"]; }
+-(NSString *)name { return @"Nu"; }
+-(NSArray *)extensions { return [NSArray arrayWithObject:@"nu"]; }
 
 - (id)init
 {
@@ -46,18 +46,16 @@
 	{
 		if (![extensions containsObject:[path pathExtension]]) goto next;
 		
-		NSBundle *b = [NSBundle bundleWithPath:path];
-		if (!b) goto next;
+		id parser = [Nu parser];
+		NSString *nuCode = [NSString stringWithContentsOfFile:[pluginsPath stringByAppendingPathComponent:path]];
+		[parser parseEval:nuCode];
+		NSString *property = [parser parseEval:@"(actionProperty)"];
 		
-		Class c = [b principalClass];
-		if (![c conformsToProtocol:@protocol(ObjCPlugin)]) goto next;
-
-		id<ObjCPlugin> plugin = [c new];
-		NSString *property = [plugin actionProperty];
 		NSMutableArray *arr = [_plugins objectForKey:property];
 		if (!arr) arr = [NSMutableArray array];
-		[arr addObject:plugin];
+		[arr addObject:nuCode];
 		[_plugins setObject:arr forKey:property];
+		[parser close];
 		
 		next:;
 	}
@@ -72,15 +70,20 @@
 	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
 	id plugin;
 	NSMutableArray *ret = [NSMutableArray array];
+	withValue = withValue ? withValue : [NSNull null];
+	forValue = forValue ? forValue : [NSNull null];
 	while (plugin = [pluginEnumerator nextObject])
 	{
-		if ([plugin actionEnableForValue:forValue withValue:withValue]) 
+		id parser = [Nu parser];
+		[parser parseEval:plugin];
+		[parser setValue:forValue forKey:@"_pluginWithValue"];
+		[parser setValue:withValue forKey:@"_pluginForValue"];
+		if ([[parser parseEval:@"(actionEnable _pluginWithValue _pluginForValue)"] boolValue])
 			[ret addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-				[plugin actionTitleForValue:forValue withValue:withValue], @"title",
+				[parser parseEval:@"(actionTitle _pluginWithValue _pluginForValue)"], @"title",
 				plugin, @"plugin",
-				forValue, @"forValue",
-				withValue, @"value",
 				nil]];
+		[parser close];
 	}
 	
 	return ret;
@@ -88,15 +91,23 @@
 
 -(void)runPlugin:(NSDictionary *)plugin forValue:(id)forValue withValue:(id)withValue
 {
-	id p = [plugin objectForKey:@"plugin"];
-	[p actionPerformForValue:forValue withValue:withValue];
+	withValue = withValue ? withValue : [NSNull null];
+	forValue = forValue ? forValue : [NSNull null];
+	NSString *nuCode = [plugin objectForKey:@"plugin"];
+	id parser = [Nu parser];
+	[parser parseEval:nuCode];
+	[parser setValue:forValue forKey:@"_pluginWithValue"];
+	[parser setValue:withValue forKey:@"_pluginForValue"];
+	[parser parseEval:@"(actionPerform _pluginWithValue _pluginForValue)"];
+	[parser close];
 }
 
 -(id)runScriptAtPath:(NSString *)path
 {
-	return NSLocalizedString(@"Objective-C plugins cannot be done run.  They must be compiled using Xcode.", @"Error string");
+	id parser = [Nu parser];
+	id ret = [parser parseEval:[NSString stringWithContentsOfFile:path]];
+	[parser close];
+	return ret;
 }
-
--(BOOL)canRunAsScript { return NO; }
 
 @end

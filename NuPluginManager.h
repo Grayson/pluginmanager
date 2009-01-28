@@ -7,11 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <Nu/Nu.h>
 #import "PluginManager.h"
-#import "PluginManagerProtocol.h"
 
 
-@interface ObjCPluginManager : NSObject <PluginManagerProtocol> {
+@interface NuPluginManager : NSObject <PluginManagerProtocol> {
 	NSMutableDictionary *_plugins;
 }
 
@@ -20,16 +20,5 @@
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)value;
 -(void)runPlugin:(NSDictionary *)plugin forValue:(id)forValue withValue:(id)withValue;
 -(id)runScriptAtPath:(NSString *)path;
-
--(BOOL)canRunAsScript;
-
-@end
-
-@protocol ObjCPlugin
-
--(NSString *)actionProperty;
--(BOOL)actionEnableForValue:(id)forValue withValue:(id)withValue;
--(NSString *)actionTitleForValue:(id)forValue withValue:(id)withValue;
--(void)actionPerformForValue:(id)forValue withValue:(id)withValue;
 
 @end
