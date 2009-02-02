@@ -32,3 +32,5 @@ typedef struct {
 @end
 
 id depythonify(PyObject *value);
+PyObject *pythonify(id value);
+PyObject *guaranteedTuple(PyObject *value);
