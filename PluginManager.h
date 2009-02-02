@@ -1,9 +1,9 @@
 //
 //  PluginManager.h
-//  SiteTagger
+//  PluginManager
 //
-//  Created by Grayson Hansard on 1/25/06.
-//  Copyright 2006 From Concentrate Software. All rights reserved.
+//  Created by Grayson Hansard
+//  Copyright 2009 From Concentrate Software. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>

@@ -1,9 +1,9 @@
 //
 //  ApplescriptPluginManager.m
-//  SiteTagger
+//  PluginManager
 //
-//  Created by Grayson Hansard on 7/20/06.
-//  Copyright 2006 From Concentrate Software. All rights reserved.
+//  Created by Grayson Hansard
+//  Copyright 2009 From Concentrate Software. All rights reserved.
 //
 
 #import "ApplescriptPluginManager.h"

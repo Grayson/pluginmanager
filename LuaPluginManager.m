@@ -1,9 +1,9 @@
 //
 //  ObjCPluginManager.m
-//  SiteTagger
+//  PluginManager
 //
-//  Created by Grayson Hansard on 11/27/06.
-//  Copyright 2006 From Concentrate Software. All rights reserved.
+//  Created by Grayson Hansard
+//  Copyright 2009 From Concentrate Software. All rights reserved.
 //
 
 #import "LuaPluginManager.h"
