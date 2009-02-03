@@ -105,7 +105,7 @@
 @end
 
 
-@implementation LuaCore (LuaPluginManagerAdditions)
+@implementation LCLua (LuaPluginManagerAdditions)
 - (id)callEmptyFunctionNamed:(NSString *)functionName expectReturnValue:(BOOL)expect {
 	// Push the function name onto the stack
     lua_pushstring (L, [functionName UTF8String]);
@@ -115,8 +115,8 @@
     
     lua_pcall (L, 0, expect, 0);
 	if (expect) {
-		id ret = lua_objc_topropertylist(L, -1);
-		if (!ret) ret = lua_objc_getid(L, -1);
+		id ret = (id)lua_objc_topropertylist(L, -1);
+		if (!ret) ret = (id)lua_objc_getid(L, -1);
 		return ret;
 	}
 	return nil;
@@ -125,7 +125,7 @@
 - (id)callFunction:(NSString *)functionName expectReturnValue:(BOOL)expect arguments:(id)firstArg, ... {
 	int functionCount = 0;
     
-    [[[NSThread currentThread] threadDictionary] setObject:[NSNumber numberWithBool:YES] forKey:LCRunningInLuaKey];
+    [[[NSThread currentThread] threadDictionary] setObject:[NSNumber numberWithBool:YES] forKey:@"LCRunningInLua"];
     
     lua_getglobal(L, [functionName UTF8String]);
 
@@ -147,10 +147,10 @@
         NSLog(@"Error running function '%@': %s", functionName, lua_tostring(L, -1));
     }
     
-    [[[NSThread currentThread] threadDictionary] removeObjectForKey:LCRunningInLuaKey];
+    [[[NSThread currentThread] threadDictionary] removeObjectForKey:@"LCRunningInLua"];
 	if (expect) {
-		id ret = lua_objc_topropertylist(L, -1);
-		if (!ret) ret = lua_objc_getid(L, -1);
+		id ret = (id)lua_objc_topropertylist(L, -1);
+		if (!ret) ret = (id)lua_objc_getid(L, -1);
 		return ret;
 	}
 	return nil;
