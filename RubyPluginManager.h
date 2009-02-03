@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import <RubyCocoa/RBRuntime.h>
-// #include <Ruby/ruby.h>
 #import "PluginManager.h"
 #import "PluginManagerProtocol.h"
 
@@ -25,10 +24,13 @@
 
 @end
 
+// RBObject isn't provided by RBRuntime.h so it's loaded dynamically.  This prevents linker warnings when
+// loading the RBObject.
 @interface NSObject (RBObject)
 -(id) RBObjectWithRubyScriptString:(NSString *)script;
 @end
 
+// A simple interface to avoid linker warnings when calling into the RBObject.
 @interface NSObject(RubyPlugin)
 -actionProperty;
 -actionEnable:withValue :forValue;
