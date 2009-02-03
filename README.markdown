@@ -20,8 +20,6 @@ As a third option, you can usually just call `runScriptAtPath:` to execute a scr
 
 * At present, the plugin managers are not optimized for performance in any sense.  They inherited a half-thought out design pattern and my first instinct was to just get them to work.  I'll go back and make them more memory-efficient in the near future, but you should certain test for memory usage before shipping.  Right now, I consider this code to be proof of concept rather than shipping quality.
 
-* The Python submanager requires a small linker change to make work and Ruby scripts must load the Cocoa bridge in a particular way.  These will be mentioned in the sections about the Python submanager and the Ruby submanager, respectively when they get written.  For now, though, if you are including Python, you'll need to add `-undefined dynamic_lookup` to get around a PyObjC issue (certain PyObjC functions are not made available except to modules, but this will skirt that).  Also, as mentioned above, Ruby and Nu don't play nicely at times but you can write Ruby scripts by catching exceptions (`begin...rescue Exception => e...end`) when using `require 'osx/cocoa'`.
-
 * There are a few other issues that will be discussed in more detail in the documentation about the plugins whenever I get around to writing it (hopefully sooner rather than later).
 
 ## Todo
@@ -76,4 +74,4 @@ I skimmed a lot of mailing lists and documentation to figure how to make some of
 
 ## Known bugs
 
-* Ruby has a conflict with Nu's version of NSString's `chomp` method.  This can be worked around for the moment by wrapping `require 'osx/cocoa'`.
+* Ruby has a conflict with Nu's version of NSString's `chomp` method.  This can be worked around for the moment by wrapping `require 'osx/cocoa'` in an exception handling block (`begin...rescue Exception => e...end`).

@@ -8,9 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Python/Python.h>
+#include <dlfcn.h>
 #import "PluginManager.h"
-// #import "objc-class.h"
-// #import "objc-object.h"
 
 // Brought in from PyObjC
 typedef struct {
@@ -34,3 +33,9 @@ typedef struct {
 id depythonify(PyObject *value);
 PyObject *pythonify(id value);
 PyObject *guaranteedTuple(PyObject *value);
+
+// A convenience method used internally by the PythonPluginManager that wraps some boilerplate code
+// around calling into a Python module.
+@interface PythonPluginManager (PrivateMethods)
+- (id)callFunction:(NSString *)functionName ofModule:(PyObject *)module arguments:(NSArray *)args;
+@end

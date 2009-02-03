@@ -8,6 +8,7 @@
 
 #import "PythonPluginManager.h"
 
+// depythonify attempts to turn a PyObject value into its id/Cocoa counterpart.
 id depythonify(PyObject *value) {
 	if (value == nil) return nil;
 	NSString *type = [NSString stringWithUTF8String:value->ob_type->tp_name];
@@ -64,6 +65,8 @@ id depythonify(PyObject *value) {
 	return nil;
 }
 
+// pythonify converts ids to their PyObject values.
+typedef PyObject *(*pyobjcobject_new_t)(id, int, int); // Function signature for PyObjCObject_New.  Used in dynamic lookup.
 PyObject *pythonify(id value) {
 	if (value == nil) return nil;
 	if ([value isKindOfClass:[NSString class]]) return PyString_FromString([value UTF8String]);
@@ -98,8 +101,15 @@ PyObject *pythonify(id value) {
 	}
 	else if ([value isKindOfClass:[NSNull class]]) return Py_None;
 	
-	return (PyObject *)PyObjCObject_New(value, 0, NO);
-	return nil;
+	// On OS X 10.5, the included PyObjC does not expose PyObjCObject_New so we're going to locate it
+	// dynamically using dlsym.
+	pyobjcobject_new_t func;
+ 	func = (pyobjcobject_new_t)dlsym(RTLD_DEFAULT, "PyObjCObject_New");
+	if (!func) {
+		NSLog(@"Could not find PyObjCObject_New.  Error: %s", dlerror());
+		return nil;
+	}
+	return func(value, 0, NO);
 }
 
 // I suspect that there's some strange interactions if multiple plugins are loaded.
@@ -118,10 +128,6 @@ PyObject *guaranteedTuple(PyObject *value) {
 	while (obj = [tmpEnumerator nextObject]) PyTuple_SetItem(tuple, idx++, pythonify(obj));
 	return tuple;
 }
-
-@interface PythonPluginManager (PrivateMethods)
-- (id)callFunction:(NSString *)functionName ofModule:(PyObject *)module arguments:(NSArray *)args;
-@end
 
 @implementation PythonPluginManager
 
@@ -144,6 +150,13 @@ PyObject *guaranteedTuple(PyObject *value) {
 	return self;
 }
 
+- (void)dealloc
+{
+	[_plugins release];
+	Py_Finalize();
+	[super dealloc];
+}
+
 - (void)build
 {
 	if (_plugins) [_plugins release];
@@ -162,26 +175,18 @@ PyObject *guaranteedTuple(PyObject *value) {
 	{
 		if (![extensions containsObject:[path pathExtension]]) continue;
 		
-		Py_SetProgramName("/usr/bin/python");
-		PyGILState_STATE state;
-		
+		Py_SetProgramName("/usr/bin/python");		
 		NSString *fullPath = [pluginsPath stringByAppendingPathComponent:path];
-		
 		FILE *pyFile = fopen([fullPath UTF8String], "r");
+		
+		// The main module (__main__ in Python) pretty much represents the Python script.  When it is loaded,
+		// the main module will contain references to the functions that will be called.
 		PyObject *mainModule = PyImport_AddModule("__main__");
 		PyObject *globals = PyModule_GetDict(mainModule);
 		
-		
+		// Load the Python file using PyRun_File and then call the actionProperty() function
 		PyRun_File(pyFile, [fullPath UTF8String], Py_file_input, globals, globals);
-		PyObject *pFunc = PyObject_GetAttrString(mainModule, "actionProperty");
-		NSString *property = nil;
-		if (pFunc && PyCallable_Check(pFunc)) {
-			state = PyGILState_Ensure();
-			PyObject *pValue = PyObject_CallObject(pFunc, nil);
-			property = depythonify(pValue);
-			Py_XDECREF(pFunc);
-			PyGILState_Release(state);
-		}
+		NSString *property = [self callFunction:@"actionProperty" ofModule:mainModule arguments:nil];
 				
 		NSMutableArray *arr = [_plugins objectForKey:property];
 		if (!arr) arr = [NSMutableArray array];
@@ -199,11 +204,17 @@ PyObject *guaranteedTuple(PyObject *value) {
 	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
 	NSValue *mainModuleValue;
 	NSMutableArray *ret = [NSMutableArray array];
+	// Python doesn't allow for functions with a dynamic number of arguments.  Well, it does the *kwargs and **kwargs
+	// stuff, but I'm not using it for this script.  For this reason, the arguments must represent some object.
+	// Since pythonify() converts NSNulls to Py_Nones, we're making sure that these values aren't just nil.
 	forValue = forValue ? forValue : [NSNull null];
 	withValue = withValue ? withValue : [NSNull null];
 	NSArray *args = [NSArray arrayWithObjects:forValue, withValue, nil];
 	while (mainModuleValue = [pluginEnumerator nextObject])
 	{
+		// Retrieve the main module and call its actionEnable() function with the forValue and the withValue
+		// If the script decides that it should be enabled, get its title by calling actionTitle() and creating
+		// the plugin dictionary.
 		PyObject *mainModule = [mainModuleValue pointerValue];
 		NSNumber *enabled = [self callFunction:@"actionEnable" ofModule:mainModule arguments:args];
 		if ([enabled boolValue]) {
@@ -218,6 +229,8 @@ PyObject *guaranteedTuple(PyObject *value) {
 
 -(void)runPlugin:(NSDictionary *)plugin forValue:(id)forValue withValue:(id)withValue
 {
+	// Like in pluginsForProperty:forValue:withValue:, the arguments should represent some real Python object.
+	// We'll turn them into Py_Nones again if they are nil and then call actionPerform().
 	PyObject *mainModule = [[plugin objectForKey:@"module"] pointerValue];
 	NSArray *args = [NSArray arrayWithObjects:forValue ? forValue : [NSNull null], withValue ? withValue : [NSNull null], nil];
 	[self callFunction:@"actionPerform" ofModule:mainModule arguments:args];
@@ -225,16 +238,27 @@ PyObject *guaranteedTuple(PyObject *value) {
 
 -(id)runScriptAtPath:(NSString *)path
 {
+	// Can it get easier to call a Python script?
+	// Note that this hasn't been tested.  Due to the GIL state, it's possible that this could cause a crash.
+	// More information on GIL states are documented in callFunction:ofModule:arguments:.
 	FILE *pyFile = fopen([path UTF8String], "r");
 	PyObject *mainModule = PyImport_AddModule("__main__");
 	PyObject *globals = PyModule_GetDict(mainModule);
 	return depythonify(PyRun_File(pyFile, [path UTF8String], Py_file_input, globals, globals));
 }
 
+// The PythonPluginManager calls into functions of a module fairly often and it tends to boilerplate code, so
+// this is a convenience method to make it easier.
 - (id)callFunction:(NSString *)functionName ofModule:(PyObject *)module arguments:(NSArray *)args {
+	// In the PythonPluginManager, the module will usually be the main module.  We get the function using
+	// PyObject_GetAttrString from the module, check to see if it exists and is callable, and then call it with
+	// PyObject_CallObject().
 	PyObject *pFunc = PyObject_GetAttrString(module, [functionName UTF8String]);
 	id ret = nil;
 	if (pFunc && PyCallable_Check(pFunc)) {
+		// The GIL state is a bit of a pain in the ass at first.  If the user imports objc into Python, the app
+		// will crash with some GIL state error.  Simply using PyGILState_Ensure() and releasing the GIL state after
+		// seems to resolve this issue.
 		PyGILState_STATE state = PyGILState_Ensure();
 		PyObject *pValue = PyObject_CallObject(pFunc, args ? guaranteedTuple(pythonify(args)) : nil);
 		ret = depythonify(pValue);
