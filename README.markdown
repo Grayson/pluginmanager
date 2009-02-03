@@ -64,7 +64,7 @@ A lot of the frameworks that PluginManager relies upon have their own licenses. 
 
 ## Special thanks
 
-I skimmed a lot of mailing lists and documentation to figure how to make some of this stuff work.  Other times, I was fortunate enough to have direct access to the developers or other people with direct knowledge of how the necessary frameworks worked.  And then there was stuff I just had to figure out on my own.  I've tried to thank everyone that I could remember to thank, but if I forgot someone, I apollogize.
+I skimmed a lot of mailing lists and documentation to figure how to make some of this stuff work.  Other times, I was fortunate enough to have direct access to the developers or other people with direct knowledge of how the necessary frameworks worked.  And then there was stuff I just had to figure out on my own.  I've tried to thank everyone that I could remember to thank, but if I forgot someone, I apologize.
 
 * [Tim Burks](http://blog.neontology.com/) - Mr. Burks is not only is the guy responsible for [Nu](http://programming.nu) but was also very helpful in helping me figure out how to interact with Nu.
 * [Gus Mueller](http://gusmueller.com) - Mr. Mueller compiled the LuaCore framework.  Although I'm intimately familiar with Lua, I was happy to see that he had put together a lot of the work into providing an Objective-C frontend to Lua.  I didn't want to compile a competing framework or increase the file noise with my own classes so I just extended his work a tiny bit (see LuaPluginManager.h).  I also used the code on Mr. Mueller's [blog](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html) to help me get running with JSCocoa quickly.
