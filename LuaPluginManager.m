@@ -103,3 +103,56 @@
 }
 
 @end
+
+
+@implementation LuaCore (LuaPluginManagerAdditions)
+- (id)callEmptyFunctionNamed:(NSString *)functionName expectReturnValue:(BOOL)expect {
+	// Push the function name onto the stack
+    lua_pushstring (L, [functionName UTF8String]);
+    
+    // Function is located in the Global Table
+    lua_gettable (L, LUA_GLOBALSINDEX);  
+    
+    lua_pcall (L, 0, expect, 0);
+	if (expect) {
+		id ret = lua_objc_topropertylist(L, -1);
+		if (!ret) ret = lua_objc_getid(L, -1);
+		return ret;
+	}
+	return nil;
+}
+
+- (id)callFunction:(NSString *)functionName expectReturnValue:(BOOL)expect arguments:(id)firstArg, ... {
+	int functionCount = 0;
+    
+    [[[NSThread currentThread] threadDictionary] setObject:[NSNumber numberWithBool:YES] forKey:LCRunningInLuaKey];
+    
+    lua_getglobal(L, [functionName UTF8String]);
+
+	id eachArg;
+	va_list argumentList;
+	if (firstArg)
+	{
+		lua_objc_pushid(L, firstArg);
+		functionCount++;
+		va_start(argumentList, firstArg);
+		while (eachArg = va_arg(argumentList, id)) {
+			lua_objc_pushid(L, eachArg);
+			functionCount++;
+		}
+		va_end(argumentList);
+	}
+    
+    if (lua_pcall(L, functionCount, expect, 0) != 0) {
+        NSLog(@"Error running function '%@': %s", functionName, lua_tostring(L, -1));
+    }
+    
+    [[[NSThread currentThread] threadDictionary] removeObjectForKey:LCRunningInLuaKey];
+	if (expect) {
+		id ret = lua_objc_topropertylist(L, -1);
+		if (!ret) ret = lua_objc_getid(L, -1);
+		return ret;
+	}
+	return nil;
+}
+@end
