@@ -175,9 +175,9 @@ PyObject *guaranteedTuple(PyObject *value) {
 	{
 		if (![extensions containsObject:[path pathExtension]]) continue;
 		
-		Py_SetProgramName("/usr/bin/python");		
+		Py_SetProgramName("/usr/bin/python");
 		NSString *fullPath = [pluginsPath stringByAppendingPathComponent:path];
-		FILE *pyFile = fopen([fullPath UTF8String], "r");
+		FILE *pyFile = fopen([fullPath fileSystemRepresentation], "r");
 		
 		// The main module (__main__ in Python) pretty much represents the Python script.  When it is loaded,
 		// the main module will contain references to the functions that will be called.
