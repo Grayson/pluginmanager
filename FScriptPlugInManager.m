@@ -1,0 +1,118 @@
+//
+//  FScriptPlugInManager.m
+//  PluginManager
+//
+//  Created by Grayson Hansard
+//  Copyright 2009 From Concentrate Software. All rights reserved.
+//
+
+#import "FScriptPlugInManager.h"
+
+
+@implementation FScriptPlugInManager
+
++(void)load {
+	NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	// Assume that the framework exists if strings can respond to `asBlock`.
+	if ([@"" respondsToSelector:@selector(asBlock)])
+		[PluginManager registerManager:[[self new] autorelease]];
+	[pool release];
+}
+
+-(NSString *)name { return @"F-Script"; }
+-(NSArray *)extensions { return [NSArray arrayWithObjects:@"fs", @"fscript", nil]; }
+
+- (id)init
+{
+	self = [super init];
+	if (!self) return nil;
+	
+	return self;
+}
+
+- (void)build
+{
+	if (_plugins) [_plugins release];
+	_plugins = [NSMutableDictionary new];
+	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	BOOL isFolder;
+	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
+	
+	NSArray *plugins = [fm directoryContentsAtPath:pluginsPath];
+	plugins = [plugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plugins" ofType:nil]]];
+	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
+	NSString *path;
+	NSArray *extensions = [self extensions];
+	
+	while (path = [pluginEnumerator nextObject])
+	{
+		FSInterpreter *interpreter = [FSInterpreter interpreter];
+		if (![extensions containsObject:[path pathExtension]]) continue;
+		
+		NSString *fullPath = [pluginsPath stringByAppendingPathComponent:path];
+		NSString *fscriptCode = [NSString stringWithContentsOfFile:fullPath];
+		
+		// Set up an FSInterpreter that will represent the plugin in memory.  Load the code using `execute:`
+		// and then get references to its functions using `objectForIdentifier:found:`.
+		FSInterpreterResult *result = [interpreter execute:fscriptCode];
+		if (![result isOK]) continue;
+		BOOL found;
+		FSBlock *b = [interpreter objectForIdentifier:@"actionProperty" found:&found];
+		if (!found) continue;
+		NSString *property = [b value];
+		if (property && [property isKindOfClass:[NSString class]])
+		{
+			NSMutableArray *arr = [_plugins objectForKey:property];
+			if (!arr) arr = [NSMutableArray array];
+			[arr addObject:interpreter];
+			[_plugins setObject:arr forKey:property];						
+		}
+	}
+}
+
+-(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
+{
+	if (!_plugins) [self build];
+	NSArray *plugins = [_plugins objectForKey:property];
+	if (!plugins || ![plugins count]) return nil;
+	
+	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
+	FSInterpreter *interpreter = nil;
+	NSMutableArray *ret = [NSMutableArray array];
+	while (interpreter = [pluginEnumerator nextObject])
+	{
+		BOOL found = NO;
+		FSBlock *b = [interpreter objectForIdentifier:@"actionEnable" found:&found];
+		if (!found) continue;
+		
+		FSBoolean *isEnabled = [b value:forValue value:withValue];
+		if (![isEnabled isKindOfClass:[True class]]) continue;
+		
+		b = [interpreter objectForIdentifier:@"actionTitle" found:&found];
+		if (!found) continue;
+		[ret addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+			[b value:forValue value:withValue], @"title",
+			interpreter, @"plugin",
+			nil]];
+	}
+	
+	return ret;
+}
+
+-(void)runPlugin:(NSDictionary *)plugin forValue:(id)forValue withValue:(id)withValue
+{
+	FSInterpreter *interpreter = [plugin objectForKey:@"plugin"];
+	BOOL found = NO;
+	FSBlock *b = [interpreter objectForIdentifier:@"actionPerform" found:&found];
+	if (!found) return;
+	[b value:forValue value:withValue];
+}
+
+-(id)runScriptAtPath:(NSString *)path
+{
+	NSString *fscriptCode = [NSString stringWithContentsOfFile:path];
+	return [[fscriptCode asBlock] value];
+}
+
+@end
