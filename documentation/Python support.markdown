@@ -115,9 +115,9 @@ Since there were no parameters, you can simply toss `nil` into `PyObject_CallObj
 
 ## A note about Py_Initialize()
 
-In all of these examples, I've shown `Py_Initialize()` as the first item to do.  However, I read on some mailing lists that it is inefficient to call it multiple times in a program.  Worse, it may have a memory leak in it (again, according to mailings lists).  If you plan on running multiple files, you can simply load them as you normally would and use them.
+In all of these examples, I've shown `Py_Initialize()` as the first item to do.  However, I read on some mailing lists that it is inefficient to call it multiple times in a program.  Worse, it may have a memory leak in it (again, according to mailings lists).  If you plan on running multiple files, you can simply call `Py_Initialize()` once early on then repeat the following steps for each file.
 
-If you plan on doing this, do not call `Py_Finalize()` until you are done using the Python interpreter.  I haven't tried it yet, but I expect that if you call `Py_Finalize()` and then try to call Python functions and whatnot, bad things could happen.  You should, of course, call `Py_Finalize()` when you are done with the interpreter, but if the Python interpreter be running during the entire application, I don't suppose there's much harm in just forgetting about it and letting it get cleaned up with everything else when the user quits your app.
+If you plan on doing this, do not call `Py_Finalize()` until you are done using the Python interpreter.  I haven't tried it yet, but I expect that if you call `Py_Finalize()` and then try to call Python functions and whatnot, bad things could happen.  You should, of course, call `Py_Finalize()` when you are done with the interpreter, but if the Python interpreter will be running during the entire lifetime of the application, I don't suppose there's much harm in just forgetting about it and letting it get cleaned up with everything else when the user quits your app.
 
 ## Converting PyObjects into their Cocoa equivalents and vice versa
 
