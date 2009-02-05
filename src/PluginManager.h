@@ -26,4 +26,6 @@
 
 +(NSArray *)managerInfo;
 
++(NSArray *)pluginFilesForSubmanager:(id)submanager;
+
 @end

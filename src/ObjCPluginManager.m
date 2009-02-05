@@ -42,14 +42,7 @@
 		[self setPlugins:plugins];
 	}
 
-	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL isFolder;
-	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
-	
-	// Add all of the plugins available in either the plugins folder in Application Support or in the bundle resources
-	NSArray *foundPlugins = [fm directoryContentsAtPath:pluginsPath];
-	foundPlugins = [foundPlugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plug-Ins" ofType:nil]]];
+	NSArray *foundPlugins = [PluginManager pluginFilesForSubmanager:self];
 	NSEnumerator *pluginEnumerator = [foundPlugins objectEnumerator];
 	NSString *path;
 	NSArray *extensions = [self extensions];

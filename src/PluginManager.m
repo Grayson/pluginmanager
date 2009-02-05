@@ -178,4 +178,24 @@ static id _pluginManagerInstance = nil;
 	return [[[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[[NSProcessInfo processInfo] processName]] stringByAppendingPathComponent:@"Plugins"];
 }
 
++(NSArray *)pluginFilesForSubmanager:(id)submanager {
+	NSString *pluginPath = [self pathToPluginsFolder];
+	NSArray *extensions = [submanager extensions];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSMutableArray *pluginFiles = [NSMutableArray array];
+	
+	NSArray *files = [fm directoryContentsAtPath:pluginPath];
+	for (NSString *file in files) 
+		if ([extensions containsObject:[file pathExtension]])
+			[pluginFiles addObject:[pluginPath stringByAppendingPathComponent:file]];
+	
+	pluginPath = [[NSBundle mainBundle] builtInPlugInsPath];
+	files = [fm directoryContentsAtPath:pluginPath];
+	for (NSString *file in files) 
+		if ([extensions containsObject:[file pathExtension]])
+			[pluginFiles addObject:[pluginPath stringByAppendingPathComponent:file]];
+	
+	return pluginFiles;
+}
+
 @end
