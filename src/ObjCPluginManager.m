@@ -31,6 +31,7 @@
 - (void)dealloc
 {
 	[self setPlugins:nil];
+	[super dealloc];
 }
 
 - (void)build
@@ -47,9 +48,9 @@
 	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
 	
 	// Add all of the plugins available in either the plugins folder in Application Support or in the bundle resources
-	NSArray *plugins = [fm directoryContentsAtPath:pluginsPath];
-	plugins = [plugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plug-Ins" ofType:nil]]];
-	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
+	NSArray *foundPlugins = [fm directoryContentsAtPath:pluginsPath];
+	foundPlugins = [foundPlugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plug-Ins" ofType:nil]]];
+	NSEnumerator *pluginEnumerator = [foundPlugins objectEnumerator];
 	NSString *path;
 	NSArray *extensions = [self extensions];
 	while (path = [pluginEnumerator nextObject])
@@ -57,7 +58,7 @@
 		if (![extensions containsObject:[path pathExtension]]) continue;
 		
 		NSBundle *b = [NSBundle bundleWithPath:path];
-		if (!b) goto next;
+		if (!b) continue;
 		
 		Class c = [b principalClass];
 		if (![c conformsToProtocol:@protocol(ObjCPlugin)]) continue;
@@ -105,7 +106,7 @@
 	if (!path) return nil;
 	NSMutableDictionary *plugins = [self plugins];
 	if (!plugins) plugins = [NSMutableDictionary dictionary];
-	id plugin = [plugins objectForKey:path];
+	id<ObjCPlugin> plugin = [plugins objectForKey:path];
 	unsigned int errorCode = 0;
 	NSString *errorString = nil;
 	if (!plugin) {
@@ -121,7 +122,7 @@
 			errorCode = ObjCPMClassLoadError;
 			goto error;
 		}
-		if (![plugin respondsToSelector:@selector(run)]) {
+		if (![(id)plugin respondsToSelector:@selector(run)]) {
 			errorString = [NSString stringWithFormat:NSLocalizedString(@"Loaded bundle at path '%@' does not respond to -(id)run.", @"error message"), path];
 			errorCode = 3;
 			goto error;

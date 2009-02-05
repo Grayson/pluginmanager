@@ -13,7 +13,7 @@
 enum {
 	ObjCPMBundleLoadError = 1,
 	ObjCPMClassLoadError = 2
-}
+};
 
 @interface ObjCPluginManager : NSObject <PluginManagerProtocol> {
 	NSMutableDictionary *_plugins;
@@ -33,11 +33,9 @@ enum {
 @end
 
 @protocol ObjCPlugin
-
 -(NSString *)actionProperty;
 -(BOOL)actionEnableForValue:(id)forValue withValue:(id)withValue;
 -(NSString *)actionTitleForValue:(id)forValue withValue:(id)withValue;
 -(void)actionPerformForValue:(id)forValue withValue:(id)withValue;
 -(id)run;
-
 @end
