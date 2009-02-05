@@ -10,6 +10,10 @@
 #import "PluginManager.h"
 #import "PluginManagerProtocol.h"
 
+enum {
+	ObjCPMBundleLoadError = 1,
+	ObjCPMClassLoadError = 2
+}
 
 @interface ObjCPluginManager : NSObject <PluginManagerProtocol> {
 	NSMutableDictionary *_plugins;
@@ -23,6 +27,9 @@
 
 -(BOOL)canRunAsScript;
 
+- (NSMutableDictionary *)plugins;
+- (void)setPlugins:(NSMutableDictionary *)aValue;
+
 @end
 
 @protocol ObjCPlugin
@@ -31,5 +38,6 @@
 -(BOOL)actionEnableForValue:(id)forValue withValue:(id)withValue;
 -(NSString *)actionTitleForValue:(id)forValue withValue:(id)withValue;
 -(void)actionPerformForValue:(id)forValue withValue:(id)withValue;
+-(id)run;
 
 @end
