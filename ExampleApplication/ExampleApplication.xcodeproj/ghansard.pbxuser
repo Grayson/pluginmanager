@@ -39,6 +39,20 @@
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
 	};
+	1DC322F70F3B74FA0011E197 /* ApplescriptPluginManager.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {439, 420}}";
+			sepNavSelRange = "{747, 0}";
+			sepNavVisRange = "{397, 350}";
+		};
+	};
+	1DC322F80F3B74FA0011E197 /* ApplescriptPluginManager.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {439, 1806}}";
+			sepNavSelRange = "{3841, 0}";
+			sepNavVisRange = "{308, 474}";
+		};
+	};
 	1DC322FA0F3B74FA0011E197 /* FScriptPlugInManager.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {439, 1554}}";
@@ -253,12 +267,51 @@
 		vrLen = 623;
 		vrLoc = 2479;
 	};
+	1DD73C7A0F3CFE1A00552B38 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1DC322F70F3B74FA0011E197 /* ApplescriptPluginManager.h */;
+		name = "ApplescriptPluginManager.h: 27";
+		rLen = 0;
+		rLoc = 747;
+		rType = 0;
+		vrLen = 350;
+		vrLoc = 397;
+	};
+	1DD73C7B0F3CFE1A00552B38 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: 'infoDictionary' undeclared (first use in this function)";
+		fRef = 1DC322F80F3B74FA0011E197 /* ApplescriptPluginManager.m */;
+		rLen = 1;
+		rLoc = 16;
+		rType = 1;
+	};
+	1DD73C7C0F3CFE1A00552B38 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1DC322F70F3B74FA0011E197 /* ApplescriptPluginManager.h */;
+		name = "ApplescriptPluginManager.h: 27";
+		rLen = 0;
+		rLoc = 747;
+		rType = 0;
+		vrLen = 350;
+		vrLoc = 397;
+	};
+	1DD73C7D0F3CFE1A00552B38 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1DC322F80F3B74FA0011E197 /* ApplescriptPluginManager.m */;
+		name = "ApplescriptPluginManager.m: 116";
+		rLen = 0;
+		rLoc = 3841;
+		rType = 0;
+		vrLen = 474;
+		vrLoc = 308;
+	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecture = i386;
 		activeBuildConfigurationName = Debug;
 		activeExecutable = 1DC322E60F3B74730011E197 /* ExampleApplication */;
 		activeTarget = 8D1107260486CEB800E47090 /* ExampleApplication */;
 		addToTargets = (
+			8D1107260486CEB800E47090 /* ExampleApplication */,
 		);
 		breakpoints = (
 			1DD73B870F3CC97C00552B38 /* malloc_error_break */,
@@ -382,6 +435,10 @@
 			1DD73C390F3CDA1800552B38 /* PBXTextBookmark */ = 1DD73C390F3CDA1800552B38 /* PBXTextBookmark */;
 			1DD73C3A0F3CDA1800552B38 /* PBXTextBookmark */ = 1DD73C3A0F3CDA1800552B38 /* PBXTextBookmark */;
 			1DD73C3B0F3CDA1800552B38 /* PBXTextBookmark */ = 1DD73C3B0F3CDA1800552B38 /* PBXTextBookmark */;
+			1DD73C7A0F3CFE1A00552B38 /* PBXTextBookmark */ = 1DD73C7A0F3CFE1A00552B38 /* PBXTextBookmark */;
+			1DD73C7B0F3CFE1A00552B38 /* PBXTextBookmark */ = 1DD73C7B0F3CFE1A00552B38 /* PBXTextBookmark */;
+			1DD73C7C0F3CFE1A00552B38 /* PBXTextBookmark */ = 1DD73C7C0F3CFE1A00552B38 /* PBXTextBookmark */;
+			1DD73C7D0F3CFE1A00552B38 /* PBXTextBookmark */ = 1DD73C7D0F3CFE1A00552B38 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 1DC322F40F3B747D0011E197 /* Source Control */;
 		userBuildSettings = {
@@ -392,5 +449,13 @@
 		executables = (
 			1DC322E60F3B74730011E197 /* ExampleApplication */,
 		);
+	};
+	8D1107310486CEB800E47090 /* Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {736, 751}}";
+			sepNavSelRange = "{611, 17}";
+			sepNavVisRange = "{0, 971}";
+			sepNavWindowFrame = "{{15, 9}, {795, 864}}";
+		};
 	};
 }

@@ -38,6 +38,8 @@
 		1DD73C2C0F3CD9A700552B38 /* NSApplescript+FCSAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323600F3B75910011E197 /* NSApplescript+FCSAdditions.m */; };
 		1DD73C300F3CD9C800552B38 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC323BD0F3B76C40011E197 /* Carbon.framework */; };
 		1DD73C5A0F3CF93500552B38 /* Example.py in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1D973F310F3BF36000437B6D /* Example.py */; };
+		1DD73C610F3CFA9F00552B38 /* NSApplication+Applescript.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD73C600F3CFA9F00552B38 /* NSApplication+Applescript.m */; };
+		1DD73C6D0F3CFBDE00552B38 /* ApplescriptPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322F80F3B74FA0011E197 /* ApplescriptPluginManager.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -124,6 +126,8 @@
 		1DD73C050F3CD7F200552B38 /* Example.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Example.js; sourceTree = "<group>"; };
 		1DD73C090F3CD82400552B38 /* Example.fscript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Example.fscript; sourceTree = "<group>"; };
 		1DD73C0B0F3CD83E00552B38 /* Example.nu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Example.nu; sourceTree = "<group>"; };
+		1DD73C5F0F3CFA9F00552B38 /* NSApplication+Applescript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSApplication+Applescript.h"; sourceTree = "<group>"; };
+		1DD73C600F3CFA9F00552B38 /* NSApplication+Applescript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSApplication+Applescript.m"; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -167,6 +171,8 @@
 			children = (
 				1DC323EA0F3B795E0011E197 /* ExampleController.h */,
 				1DC323EB0F3B795E0011E197 /* ExampleController.m */,
+				1DD73C5F0F3CFA9F00552B38 /* NSApplication+Applescript.h */,
+				1DD73C600F3CFA9F00552B38 /* NSApplication+Applescript.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -416,6 +422,8 @@
 				1DD73C060F3CD7F200552B38 /* Example.js in Sources */,
 				1DD73C2B0F3CD9A300552B38 /* FScriptPlugInManager.m in Sources */,
 				1DD73C2C0F3CD9A700552B38 /* NSApplescript+FCSAdditions.m in Sources */,
+				1DD73C610F3CFA9F00552B38 /* NSApplication+Applescript.m in Sources */,
+				1DD73C6D0F3CFBDE00552B38 /* ApplescriptPluginManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

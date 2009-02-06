@@ -250,6 +250,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -288,22 +290,19 @@
 								<string>29B97314FDCFA39411CA2CEA</string>
 								<string>1DC323CE0F3B77B40011E197</string>
 								<string>1DC3242A0F3B86790011E197</string>
+								<string>080E96DDFE201D6D7F000001</string>
 								<string>1C37FBAC04509CD000000102</string>
 								<string>1DD73A340F3C9F0400552B38</string>
-								<string>1DD73B300F3CA0EC00552B38</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>24</integer>
-									<integer>23</integer>
-									<integer>18</integer>
-									<integer>17</integer>
+									<integer>30</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {186, 338}}</string>
+							<string>{{0, 308}, {186, 338}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -524,7 +523,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>255654198.51406601</real>
+	<real>255655452.46238601</real>
 	<key>ToolbarDisplayMode</key>
 	<integer>1</integer>
 	<key>ToolbarIsVisible</key>
@@ -539,6 +538,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1DD73C6F0F3CFBE100552B38</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>1DD73B9B0F3CCA0A00552B38</string>
 		<string>1DD73B9C0F3CCA0A00552B38</string>

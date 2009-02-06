@@ -401,6 +401,9 @@ SUCH DAMAGE.
 		<cocoa name="ExampleApplication"/>
 		<class name="application" code="capp" inherits="application">
 			<cocoa class="NSApplication"/>
+			<responds-to name="run script">
+				<cocoa method="ASRunScript:"/>
+			</responds-to>
 		</class>
 		<command name="action property" code="exPMXprp">
 			<result type="text"/>
@@ -431,6 +434,12 @@ SUCH DAMAGE.
 				<cocoa key="with"/>
 			</parameter>
 			<result type="any"/>
+		</command>
+		<command name="run script" code="exPMrNSc" description="Run a script at a given path.">
+			<direct-parameter description="The file or a path to the file to execute.">
+				<type type="file"/>
+				<type type="text"/>
+			</direct-parameter>
 		</command>
 	</suite>
 </dictionary>
