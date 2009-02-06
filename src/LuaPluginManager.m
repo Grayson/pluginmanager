@@ -32,31 +32,17 @@
 {
 	if (_plugins) [_plugins release];
 	_plugins = [NSMutableDictionary new];
-	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL isFolder;
-	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
-	
-	NSArray *plugins = [fm directoryContentsAtPath:pluginsPath];
-	plugins = [plugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plugins" ofType:nil]]];
-	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
-	NSString *path;
-	NSArray *extensions = [self extensions];
-	while (path = [pluginEnumerator nextObject])
+	for (NSString *path in [PluginManager pluginFilesForSubmanager:self])
 	{
-		if (![extensions containsObject:[path pathExtension]]) goto next;
-		
 		LCLua *lua = [LCLua readyLua];
-		NSString *luaCode = [NSString stringWithContentsOfFile:[pluginsPath stringByAppendingPathComponent:path]];
-		[lua runFileAtPath:[pluginsPath stringByAppendingPathComponent:path]];
+		NSString *luaCode = [NSString stringWithContentsOfFile:path];
+		[lua runFileAtPath:path];
 		
 		NSString *property = [lua callEmptyFunctionNamed:@"actionProperty" expectReturnValue:YES];		
 		NSMutableArray *arr = [_plugins objectForKey:property];
 		if (!arr) arr = [NSMutableArray array];
 		[arr addObject:luaCode];
 		[_plugins setObject:arr forKey:property];
-		
-		next:;
 	}
 }
 

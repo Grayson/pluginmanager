@@ -32,38 +32,25 @@
 {
 	if (_plugins) [_plugins release];
 	_plugins = [NSMutableDictionary new];
-	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL isFolder;
-	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
 	
-	NSArray *plugins = [fm directoryContentsAtPath:pluginsPath];
-	plugins = [plugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plugins" ofType:nil]]];
-	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
-	NSString *path;
-	NSArray *extensions = [self extensions];
-	while (path = [pluginEnumerator nextObject])
+	for (NSString *path in [PluginManager pluginFilesForSubmanager:self])
 	{
-		if (![extensions containsObject:[path pathExtension]]) goto next;
-		
 		JSCocoaController *controller = [[JSCocoaController new] autorelease];
-		[controller evalJSFile:[pluginsPath stringByAppendingPathComponent:path]];
+		[controller evalJSFile:path];
 		
 		if (![controller hasJSFunctionNamed:@"actionProperty"] ||
 			![controller hasJSFunctionNamed:@"actionEnable"] ||
 			![controller hasJSFunctionNamed:@"actionTitle"] ||
-			![controller hasJSFunctionNamed:@"actionPerform"]) goto next;
+			![controller hasJSFunctionNamed:@"actionPerform"]) continue;
 		
 		JSValueRef value = [controller callJSFunctionNamed:@"actionProperty" withArguments:nil];
 		NSString *property;
-		if (![JSCocoaFFIArgument unboxJSValueRef:value toObject:&property inContext:[controller ctx]]) goto next;
+		if (![JSCocoaFFIArgument unboxJSValueRef:value toObject:&property inContext:[controller ctx]]) continue;
 		
 		NSMutableArray *arr = [_plugins objectForKey:property];
 		if (!arr) arr = [NSMutableArray array];
 		[arr addObject:controller];
-		[_plugins setObject:arr forKey:property];
-		
-		next:;
+		[_plugins setObject:arr forKey:property];		
 	}
 }
 

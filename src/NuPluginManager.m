@@ -32,22 +32,10 @@
 {
 	if (_plugins) [_plugins release];
 	_plugins = [NSMutableDictionary new];
-	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL isFolder;
-	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
-	
-	NSArray *plugins = [fm directoryContentsAtPath:pluginsPath];
-	plugins = [plugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plugins" ofType:nil]]];
-	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
-	NSString *path;
-	NSArray *extensions = [self extensions];
-	while (path = [pluginEnumerator nextObject])
+	for (NSString *path in [PluginManager pluginFilesForSubmanager:self])
 	{
-		if (![extensions containsObject:[path pathExtension]]) goto next;
-		
 		id parser = [Nu parser];
-		NSString *nuCode = [NSString stringWithContentsOfFile:[pluginsPath stringByAppendingPathComponent:path]];
+		NSString *nuCode = [NSString stringWithContentsOfFile:path];
 		[parser parseEval:nuCode];
 		NSString *property = [parser parseEval:@"(actionProperty)"];
 		
@@ -56,8 +44,6 @@
 		[arr addObject:nuCode];
 		[_plugins setObject:arr forKey:property];
 		[parser close];
-		
-		next:;
 	}
 }
 

@@ -11,12 +11,6 @@
 // depythonify attempts to turn a PyObject value into its id/Cocoa counterpart.
 id depythonify(PyObject *value) {
 	if (value == nil) return nil;
-	NSString *type = [NSString stringWithUTF8String:value->ob_type->tp_name];
-	Class c = NSClassFromString(type);
-	if (c) {
-		PyObjCObject *tmp = (PyObjCObject *)value;
-		return tmp->objc_object;
-	}
 	if (PyInt_Check(value) || PyLong_Check(value) || PyBool_Check(value)) 
 		return [NSNumber numberWithLong:PyInt_AsLong(value)];
 	else if (PyFloat_Check(value)) return [NSNumber numberWithDouble:PyFloat_AsDouble(value)];
@@ -57,8 +51,17 @@ id depythonify(PyObject *value) {
 		return dict;
 	}
 	else if (value == Py_None) return [NSNull null];
+	else {
+		NSString *type = [NSString stringWithUTF8String:value->ob_type->tp_name];
+		if ([type isEqualToString:@"True"]) return [NSNumber numberWithBool:YES];
+		else if ([type isEqualToString:@"False"]) return [NSNumber numberWithBool:NO];
+		Class c = NSClassFromString(type);
+		if (c) {
+			PyObjCObject *tmp = (PyObjCObject *)value;
+			return tmp->objc_object;
+		}
+	}
 	
-	// NSLog(@"[depythonify error] Unknown type: %@", type);
 	Class OC_PythonObj = NSClassFromString(@"OC_PythonObject");
 	if (OC_PythonObj) 
 		return [[OC_PythonObj performSelector:@selector(newWithObject:) withObject:(id)value] autorelease];
@@ -246,8 +249,9 @@ PyObject *guaranteedTuple(PyObject *value) {
 		// will crash with some GIL state error.  Simply using PyGILState_Ensure() and releasing the GIL state after
 		// seems to resolve this issue.
 		PyGILState_STATE state = PyGILState_Ensure();
-		PyObject *pValue = PyObject_CallObject(pFunc, args ? guaranteedTuple(pythonify(args)) : nil);
-		ret = depythonify(pValue);
+		PyObject *pValue = PyObject_CallObject(pFunc, args ? guaranteedTuple(pythonify([NSArray arrayWithObjects:@"", @"", nil])) : nil);
+		if (pValue == nil) PyErr_Print();
+		else ret = depythonify(pValue);
 		Py_XDECREF(pFunc);
 		PyGILState_Release(state);
 	}

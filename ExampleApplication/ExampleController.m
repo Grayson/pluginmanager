@@ -20,7 +20,7 @@
 	NSDictionary *meDict = [NSDictionary dictionaryWithObjectsAndKeys:
 		[NSString stringWithFormat:@"%@ %@", [me valueForProperty:kABFirstNameProperty], [me valueForProperty:kABLastNameProperty], nil], @"name",
 			[me valueForProperty:kABPhoneProperty], @"phone", nil];
-	self.me = meDict;	
+	self.me = meDict;
 }
 
 - (IBAction)showPluginMenu:(id)sender {

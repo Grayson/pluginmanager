@@ -1,15 +1,17 @@
-def applicationProperty
+require 'osx/cocoa'
+
+def actionProperty()
   return "label-click"
 end
 
-def applicationEnable withValue, forValue
+def actionEnable(withValue, forValue)
   return true
 end
 
-def applicationTitle withValue, forValue
+def actionTitle(withValue, forValue)
   return "Ruby example"
 end
 
-def applicationPerform withValue, forValue
-  puts "In Ruby example"
+def actionEnable(withValue, forValue)
+  puts withValue
 end

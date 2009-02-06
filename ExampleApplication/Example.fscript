@@ -1,0 +1,4 @@
+actionProperty := [ 'label-click' ].
+actionEnable := [:forValue :withValue| YES].
+actionTitle := [:forValue :withValue| 'F-Script test'].
+actionPerform := [:forValue :withValue| sys log:forValue].

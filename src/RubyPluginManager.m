@@ -40,32 +40,22 @@
 	if (_plugins) [_plugins release];
 	_plugins = [NSMutableDictionary new];
 	
-	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL isFolder;
-	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
-	
-	NSEnumerator *e = [[fm directoryContentsAtPath:pluginsPath] objectEnumerator];
-	NSString *path = nil;
-	while (path = [e nextObject])
+	for (NSString *scriptPath in [PluginManager pluginFilesForSubmanager:self])
 	{
-		if ([[path pathExtension] isEqualToString:@"rb"])
-		{
-			// Could it be any easier to load a Ruby script with RubyCocoa?  Simply get a script as an NSString
-			// and load it using RBObjectWithRubyScriptString:.
-			NSString *scriptPath = [pluginsPath stringByAppendingPathComponent:path];
-			id rb = [RBObject RBObjectWithRubyScriptString:[NSString stringWithContentsOfFile:scriptPath]];
-			if (!rb) continue;
-			
-			// RBObjects are really NSProxies.  RubyCocoa makes it easy to call functions in a Ruby script
-			// simply by calling the function name as a proxy method.  Here, it'll be calling `actionProperty()`
-			// from the loaded script.
-			NSString *property = [rb actionProperty];			
-			NSMutableArray *arr = [_plugins objectForKey:property];
-			if (!arr) arr = [NSMutableArray array];
-			[arr addObject:rb];
-			[_plugins setObject:arr forKey:property];
-		}
+		// Could it be any easier to load a Ruby script with RubyCocoa?  Simply get a script as an NSString
+		// and load it using RBObjectWithRubyScriptString:.
+		
+		id rb = [RBObject RBObjectWithRubyScriptString:[NSString stringWithContentsOfFile:scriptPath]];
+		if (!rb) continue;
+		
+		// RBObjects are really NSProxies.  RubyCocoa makes it easy to call functions in a Ruby script
+		// simply by calling the function name as a proxy method.  Here, it'll be calling `actionProperty()`
+		// from the loaded script.
+		NSString *property = [rb actionProperty];
+		NSMutableArray *arr = [_plugins objectForKey:property];
+		if (!arr) arr = [NSMutableArray array];
+		[arr addObject:rb];
+		[_plugins setObject:arr forKey:property];
 	}
 }
 
@@ -78,14 +68,14 @@
 	if (!arr || ![arr count]) return nil;
 	
 	NSEnumerator *pluginEnumerator = [arr objectEnumerator];
-	id plugin;
+	id rb;
 	NSMutableArray *ret = [NSMutableArray array];
-	while (plugin = [pluginEnumerator nextObject])
+	while (rb = [pluginEnumerator nextObject])
 	{
-		if ([plugin actionEnable:forValue :withValue]) 
+		if ([rb actionEnable:nil :nil]) 
 			[ret addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-				[plugin actionTitle:forValue :withValue], @"title",
-				plugin, @"plugin",
+				[rb actionTitle:nil :nil], @"title",
+				rb, @"plugin",
 				forValue, @"forValue",
 				withValue, @"value",
 				nil]];

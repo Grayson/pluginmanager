@@ -34,24 +34,10 @@
 {
 	if (_plugins) [_plugins release];
 	_plugins = [NSMutableDictionary new];
-	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL isFolder;
-	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
-	
-	NSArray *plugins = [fm directoryContentsAtPath:pluginsPath];
-	plugins = [plugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plugins" ofType:nil]]];
-	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
-	NSString *path;
-	NSArray *extensions = [self extensions];
-	
-	while (path = [pluginEnumerator nextObject])
+	for (NSString *path in [PluginManager pluginFilesForSubmanager:self])
 	{
 		FSInterpreter *interpreter = [FSInterpreter interpreter];
-		if (![extensions containsObject:[path pathExtension]]) continue;
-		
-		NSString *fullPath = [pluginsPath stringByAppendingPathComponent:path];
-		NSString *fscriptCode = [NSString stringWithContentsOfFile:fullPath];
+		NSString *fscriptCode = [NSString stringWithContentsOfFile:path];
 		
 		// Set up an FSInterpreter that will represent the plugin in memory.  Load the code using `execute:`
 		// and then get references to its functions using `objectForIdentifier:found:`.
