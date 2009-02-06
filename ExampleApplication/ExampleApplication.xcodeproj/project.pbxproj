@@ -30,6 +30,8 @@
 		1DC323D50F3B77E90011E197 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		1DC323DC0F3B78C90011E197 /* ExampleObjCPlugin.bundle in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1DC323C80F3B77990011E197 /* ExampleObjCPlugin.bundle */; };
 		1DC323EC0F3B795E0011E197 /* ExampleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323EB0F3B795E0011E197 /* ExampleController.m */; };
+		1DC3242E0F3B87190011E197 /* Example.scpt in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1DC3242B0F3B870C0011E197 /* Example.scpt */; };
+		1DC324320F3B89D30011E197 /* ExampleApplication.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 1DC324310F3B89D30011E197 /* ExampleApplication.sdef */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -41,7 +43,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 1DC323C70F3B77990011E197 /* ExampleObjCPlugin */;
+			remoteGlobalIDString = 1DC323C70F3B77990011E197;
 			remoteInfo = ExampleObjCPlugin;
 		};
 /* End PBXContainerItemProxy section */
@@ -53,6 +55,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				1DC3242E0F3B87190011E197 /* Example.scpt in Copy plugins */,
 				1DC323DC0F3B78C90011E197 /* ExampleObjCPlugin.bundle in Copy plugins */,
 			);
 			name = "Copy plugins";
@@ -100,6 +103,8 @@
 		1DC323D10F3B77D80011E197 /* ExamplePlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExamplePlugin.m; sourceTree = "<group>"; };
 		1DC323EA0F3B795E0011E197 /* ExampleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleController.h; sourceTree = "<group>"; };
 		1DC323EB0F3B795E0011E197 /* ExampleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleController.m; sourceTree = "<group>"; };
+		1DC3242B0F3B870C0011E197 /* Example.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = Example.scpt; sourceTree = "<group>"; };
+		1DC324310F3B89D30011E197 /* ExampleApplication.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = ExampleApplication.sdef; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -206,6 +211,7 @@
 		1DC323CE0F3B77B40011E197 /* ExampleApplication */ = {
 			isa = PBXGroup;
 			children = (
+				1DC3242A0F3B86790011E197 /* PlugIns */,
 				1DC322F60F3B74FA0011E197 /* src */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -222,6 +228,14 @@
 				1DC323D10F3B77D80011E197 /* ExamplePlugin.m */,
 			);
 			name = ExampleObjCPlugin;
+			sourceTree = "<group>";
+		};
+		1DC3242A0F3B86790011E197 /* PlugIns */ = {
+			isa = PBXGroup;
+			children = (
+				1DC3242B0F3B870C0011E197 /* Example.scpt */,
+			);
+			name = PlugIns;
 			sourceTree = "<group>";
 		};
 		29B97314FDCFA39411CA2CEA /* ExampleApplication */ = {
@@ -247,6 +261,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1DC324310F3B89D30011E197 /* ExampleApplication.sdef */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -343,6 +358,7 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				1DC324320F3B89D30011E197 /* ExampleApplication.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
