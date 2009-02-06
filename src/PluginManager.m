@@ -63,7 +63,6 @@ static id _pluginManagerInstance = nil;
 	NSString *ext = [path pathExtension];
 	while (m = [e nextObject]) 
 	{
-		NSLog(@"%s %@", _cmd, [m extensions]);
 		if ([[m extensions] containsObject:ext])
 			return [m runScriptAtPath:path];
 	}

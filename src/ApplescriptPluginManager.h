@@ -23,3 +23,5 @@
 -(id)runScriptAtPath:(NSString *)path;
 
 @end
+
+unsigned long ASPluginAppClassCode();

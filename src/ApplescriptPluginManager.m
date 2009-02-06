@@ -12,6 +12,18 @@
 -(void)build;
 @end
 
+unsigned long ASPluginAppClassCode() {
+	NSDictionary *infoPlist = [[NSBundle mainBundle] infoDictionary];
+	NSString *sig = [infoPlist objectForKey:@"CFBundleSignature"];
+	unsigned long code = 0;
+	code += [sig characterAtIndex:0] << 24;
+	code += [sig characterAtIndex:1] << 16;
+	code += [sig characterAtIndex:2] << 8;
+	code += [sig characterAtIndex:3];
+	
+	return code;
+}
+
 @implementation ApplescriptPluginManager
 
 +(void)load {
@@ -39,7 +51,7 @@
 	{
 		NSAppleScript *as = [NSAppleScript appleScriptWithContentsOfFile:path];
 		if (!as) continue;
-		NSAppleEventDescriptor *desc = [NSAppleEventDescriptor appleEventWithEventClass:ASPluginAppClassCode eventID:ASPluginPropertyEventCode targetDescriptor:procDesc returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
+		NSAppleEventDescriptor *desc = [NSAppleEventDescriptor appleEventWithEventClass:ASPluginAppClassCode() eventID:ASPluginPropertyEventCode targetDescriptor:procDesc returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
 		id err = nil;
 		NSAppleEventDescriptor *ret = [as executeAppleEvent:desc error:&err];
 		NSLog(@"%s %@", _cmd, err);
@@ -73,10 +85,10 @@
 	
 	while (as = [e nextObject])
 	{
-		NSAppleEventDescriptor *enabledDesc = [as executeEvent:ASPluginEnableEventCode eventClass:ASPluginAppClassCode parameters:parameters];
+		NSAppleEventDescriptor *enabledDesc = [as executeEvent:ASPluginEnableEventCode eventClass:ASPluginAppClassCode() parameters:parameters];
 		if (enabledDesc && [enabledDesc booleanValue])
 		{
-			NSAppleEventDescriptor *desc = [as executeEvent:ASPluginTitleEventCode eventClass:ASPluginAppClassCode parameters:parameters];
+			NSAppleEventDescriptor *desc = [as executeEvent:ASPluginTitleEventCode eventClass:ASPluginAppClassCode() parameters:parameters];
 			if (desc) 
 				[ret addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 					[desc stringValue], @"title",
@@ -92,7 +104,7 @@
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 	if (forValue) [parameters setObject:forValue forKey:[NSNumber numberWithUnsignedLong:ASPluginForCode]];
 	if (withValue) [parameters setObject:withValue forKey:[NSNumber numberWithUnsignedLong:ASPluginWithCode]];
-	[[plugin objectForKey:@"applescript"] executeEvent:ASPluginPerformEventCode eventClass:ASPluginAppClassCode parameters:parameters];
+	[[plugin objectForKey:@"applescript"] executeEvent:ASPluginPerformEventCode eventClass:ASPluginAppClassCode() parameters:parameters];
 }
 
 -(id)runScriptAtPath:(NSString *)path
