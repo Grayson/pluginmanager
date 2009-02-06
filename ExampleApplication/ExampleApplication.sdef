@@ -399,32 +399,35 @@ SUCH DAMAGE.
 	</suite>
 	<suite name="ExampleApplication suite" code="exPM" description="Skeleton suite for implementing Applescript plugins">
 		<cocoa name="ExampleApplication"/>
-		<command name="action property" code="exPMAprp">
+		<class name="application" code="capp" inherits="application">
+			<cocoa class="NSApplication"/>
+		</class>
+		<command name="action property" code="exPMXprp">
 			<result type="text"/>
 		</command>
-		<command name="action enable" code="exPMAena">
+		<command name="action enable" code="exPMXena">
 			<parameter name="for" code="foR_" type="any">
 				<cocoa key="for"/>
 			</parameter>
-			<parameter name="with" code="wiTh" type="any">
+			<parameter name="with" code="wITh" type="any">
 				<cocoa key="with"/>
 			</parameter>
 			<result type="boolean"/>
 		</command>
-		<command name="action title" code="exPMAtit">
+		<command name="action title" code="exPMXtit">
 			<parameter name="for" code="foR_" type="any">
 				<cocoa key="for"/>
 			</parameter>
-			<parameter name="with" code="wiTh" type="any">
+			<parameter name="with" code="wITh" type="any">
 				<cocoa key="with"/>
 			</parameter>
 			<result type="text"/>
 		</command>
-		<command name="action perform" code="exPMaPer">
+		<command name="action perform" code="exPMXprf">
 			<parameter name="for" code="foR_" type="any">
 				<cocoa key="for"/>
 			</parameter>
-			<parameter name="with" code="wiTh" type="any">
+			<parameter name="with" code="wITh" type="any">
 				<cocoa key="with"/>
 			</parameter>
 			<result type="any"/>

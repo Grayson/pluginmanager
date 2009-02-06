@@ -7,10 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <AddressBook/AddressBook.h>
 
 
 @interface ExampleController : NSObject {
-
+	NSDictionary *_me;
 }
+
+@property (retain) NSDictionary *me;
+
+- (IBAction)showPluginMenu:(id)sender;
 
 @end

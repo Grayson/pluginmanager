@@ -33,32 +33,24 @@
 	if (_plugins) [_plugins release];
 	_plugins = [NSMutableDictionary new];
 	
-	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL isFolder;
-	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
-	
-	NSEnumerator *e = [[fm directoryContentsAtPath:pluginsPath] objectEnumerator];
-	NSString *path = nil;
+	NSArray *foundPlugins = [PluginManager pluginFilesForSubmanager:self];
 	NSAppleEventDescriptor *procDesc = [NSAppleScript processDescriptor];
-	while (path = [e nextObject])
+	for (NSString *path in foundPlugins)
 	{
-		if ([[path pathExtension] isEqualToString:@"scpt"])
+		NSAppleScript *as = [NSAppleScript appleScriptWithContentsOfFile:path];
+		if (!as) continue;
+		NSAppleEventDescriptor *desc = [NSAppleEventDescriptor appleEventWithEventClass:ASPluginAppClassCode eventID:ASPluginPropertyEventCode targetDescriptor:procDesc returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
+		id err = nil;
+		NSAppleEventDescriptor *ret = [as executeAppleEvent:desc error:&err];
+		NSLog(@"%s %@", _cmd, err);
+		NSLog(@"%s %@", _cmd, ret);
+		if (ret)
 		{
-			NSAppleScript *as = [NSAppleScript appleScriptWithContentsOfFile:[pluginsPath stringByAppendingPathComponent:path]];
-			if (as)
-			{
-				NSAppleEventDescriptor *desc = [NSAppleEventDescriptor appleEventWithEventClass:ASPluginAppClassCode eventID:ASPluginPropertyEventCode targetDescriptor:procDesc returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
-				NSAppleEventDescriptor *ret = [as executeAppleEvent:desc error:nil];
-				if (ret)
-				{
-					NSString *property = [ret stringValue];
-					NSMutableArray *arr = [_plugins objectForKey:property];
-					if (!arr) arr = [NSMutableArray array];
-					[arr addObject:as];
-					[_plugins setObject:arr forKey:property];
-				}
-			}
+			NSString *property = [ret stringValue];
+			NSMutableArray *arr = [_plugins objectForKey:property];
+			if (!arr) arr = [NSMutableArray array];
+			[arr addObject:as];
+			[_plugins setObject:arr forKey:property];
 		}
 	}
 }

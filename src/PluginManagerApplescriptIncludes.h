@@ -1,5 +1,5 @@
 enum PluginAppleEventCodes {
-	ASPluginAppClassCode = 'pClp',
+	ASPluginAppClassCode = 'exPM',
 	ASPluginForCode = 'foR_',
 	ASPluginWithCode = 'wITh',
 	

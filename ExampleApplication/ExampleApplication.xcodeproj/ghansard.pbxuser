@@ -38,6 +38,11 @@
 	1DC323C70F3B77990011E197 /* ExampleObjCPlugin */ = {
 		activeExec = 0;
 	};
+	1DC324310F3B89D30011E197 /* ExampleApplication.sdef */ = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{15, 9}, {795, 864}}";
+		};
+	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecture = i386;
 		activeBuildConfigurationName = Debug;
@@ -109,8 +114,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 255583660;
-			PBXWorkspaceStateSaveDate = 255583660;
+			PBXPerProjectTemplateStateSaveDate = 255631107;
+			PBXWorkspaceStateSaveDate = 255631107;
 		};
 		sourceControlManager = 1DC322F40F3B747D0011E197 /* Source Control */;
 		userBuildSettings = {

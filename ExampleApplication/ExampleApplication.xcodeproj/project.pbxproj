@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D973ECE0F3BE83900437B6D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D973ECD0F3BE83900437B6D /* AddressBook.framework */; };
+		1D973F320F3BF36000437B6D /* Example.py in Resources */ = {isa = PBXBuildFile; fileRef = 1D973F310F3BF36000437B6D /* Example.py */; };
 		1DC3230B0F3B74FA0011E197 /* ApplescriptPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322F80F3B74FA0011E197 /* ApplescriptPluginManager.m */; };
 		1DC3230C0F3B74FA0011E197 /* FScriptPlugInManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322FA0F3B74FA0011E197 /* FScriptPlugInManager.m */; };
 		1DC3230D0F3B74FA0011E197 /* JavascriptPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322FC0F3B74FA0011E197 /* JavascriptPluginManager.m */; };
@@ -32,6 +34,9 @@
 		1DC323EC0F3B795E0011E197 /* ExampleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323EB0F3B795E0011E197 /* ExampleController.m */; };
 		1DC3242E0F3B87190011E197 /* Example.scpt in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1DC3242B0F3B870C0011E197 /* Example.scpt */; };
 		1DC324320F3B89D30011E197 /* ExampleApplication.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 1DC324310F3B89D30011E197 /* ExampleApplication.sdef */; };
+		1DD73AC20F3C9F9B00552B38 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD73AC10F3C9F9B00552B38 /* ScriptingBridge.framework */; };
+		1DD73B280F3CA06500552B38 /* Example.rb in Resources */ = {isa = PBXBuildFile; fileRef = 1DD73B270F3CA06500552B38 /* Example.rb */; };
+		1DD73B2E0F3CA0DE00552B38 /* Example.rb in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1DD73B270F3CA06500552B38 /* Example.rb */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -55,6 +60,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				1DD73B2E0F3CA0DE00552B38 /* Example.rb in Copy plugins */,
 				1DC3242E0F3B87190011E197 /* Example.scpt in Copy plugins */,
 				1DC323DC0F3B78C90011E197 /* ExampleObjCPlugin.bundle in Copy plugins */,
 			);
@@ -67,6 +73,8 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1D973ECD0F3BE83900437B6D /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = /System/Library/Frameworks/AddressBook.framework; sourceTree = "<absolute>"; };
+		1D973F310F3BF36000437B6D /* Example.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Example.py; sourceTree = "<group>"; };
 		1DC322F70F3B74FA0011E197 /* ApplescriptPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplescriptPluginManager.h; sourceTree = "<group>"; };
 		1DC322F80F3B74FA0011E197 /* ApplescriptPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplescriptPluginManager.m; sourceTree = "<group>"; };
 		1DC322F90F3B74FA0011E197 /* FScriptPlugInManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FScriptPlugInManager.h; sourceTree = "<group>"; };
@@ -105,6 +113,8 @@
 		1DC323EB0F3B795E0011E197 /* ExampleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleController.m; sourceTree = "<group>"; };
 		1DC3242B0F3B870C0011E197 /* Example.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = Example.scpt; sourceTree = "<group>"; };
 		1DC324310F3B89D30011E197 /* ExampleApplication.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = ExampleApplication.sdef; sourceTree = "<group>"; };
+		1DD73AC10F3C9F9B00552B38 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = /System/Library/Frameworks/ScriptingBridge.framework; sourceTree = "<absolute>"; };
+		1DD73B270F3CA06500552B38 /* Example.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = Example.rb; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -136,6 +146,8 @@
 				1DC3235D0F3B75370011E197 /* libruby.dylib in Frameworks */,
 				1DC323660F3B75C70011E197 /* LuaCore.framework in Frameworks */,
 				1DC323BE0F3B76C40011E197 /* Carbon.framework in Frameworks */,
+				1D973ECE0F3BE83900437B6D /* AddressBook.framework in Frameworks */,
+				1DD73AC20F3C9F9B00552B38 /* ScriptingBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,7 +190,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1DC322F60F3B74FA0011E197 /* src */ = {
+		1DC322F60F3B74FA0011E197 /* PluginManager */ = {
 			isa = PBXGroup;
 			children = (
 				1DC3235F0F3B75910011E197 /* NSApplescript+FCSAdditions.h */,
@@ -204,7 +216,7 @@
 				1DC323090F3B74FA0011E197 /* RubyPluginManager.h */,
 				1DC3230A0F3B74FA0011E197 /* RubyPluginManager.m */,
 			);
-			name = src;
+			name = PluginManager;
 			path = ../src;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -212,7 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				1DC3242A0F3B86790011E197 /* PlugIns */,
-				1DC322F60F3B74FA0011E197 /* src */,
+				1DC322F60F3B74FA0011E197 /* PluginManager */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -234,6 +246,8 @@
 			isa = PBXGroup;
 			children = (
 				1DC3242B0F3B870C0011E197 /* Example.scpt */,
+				1D973F310F3BF36000437B6D /* Example.py */,
+				1DD73B270F3CA06500552B38 /* Example.rb */,
 			);
 			name = PlugIns;
 			sourceTree = "<group>";
@@ -272,6 +286,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1DD73AC10F3C9F9B00552B38 /* ScriptingBridge.framework */,
+				1D973ECD0F3BE83900437B6D /* AddressBook.framework */,
 				1DC323BD0F3B76C40011E197 /* Carbon.framework */,
 				1DC3235C0F3B75370011E197 /* libruby.dylib */,
 				1DC323650F3B75C70011E197 /* LuaCore.framework */,
@@ -359,6 +375,8 @@
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DC324320F3B89D30011E197 /* ExampleApplication.sdef in Resources */,
+				1D973F320F3BF36000437B6D /* Example.py in Resources */,
+				1DD73B280F3CA06500552B38 /* Example.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

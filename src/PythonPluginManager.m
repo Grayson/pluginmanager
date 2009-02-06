@@ -107,7 +107,7 @@ PyObject *pythonify(id value) {
  	func = (pyobjcobject_new_t)dlsym(RTLD_DEFAULT, "PyObjCObject_New");
 	if (!func) {
 		NSLog(@"Could not find PyObjCObject_New.  Error: %s", dlerror());
-		return nil;
+		return Py_None;
 	}
 	return func(value, 0, NO);
 }
@@ -161,23 +161,9 @@ PyObject *guaranteedTuple(PyObject *value) {
 {
 	if (_plugins) [_plugins release];
 	_plugins = [NSMutableDictionary new];
-	NSString *pluginsPath = [PluginManager pathToPluginsFolder];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL isFolder;
-	if (![fm fileExistsAtPath:pluginsPath isDirectory:&isFolder] || !isFolder) return;
-	
-	NSArray *plugins = [fm directoryContentsAtPath:pluginsPath];
-	plugins = [plugins arrayByAddingObjectsFromArray:[fm directoryContentsAtPath:[[NSBundle mainBundle] pathForResource:@"Plugins" ofType:nil]]];
-	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];
-	NSString *path;
-	NSArray *extensions = [self extensions];
-	while (path = [pluginEnumerator nextObject])
-	{
-		if (![extensions containsObject:[path pathExtension]]) continue;
-		
+	for (NSString *path in [PluginManager pluginFilesForSubmanager:self]) {
 		Py_SetProgramName("/usr/bin/python");
-		NSString *fullPath = [pluginsPath stringByAppendingPathComponent:path];
-		FILE *pyFile = fopen([fullPath fileSystemRepresentation], "r");
+		FILE *pyFile = fopen([path fileSystemRepresentation], "r");
 		
 		// The main module (__main__ in Python) pretty much represents the Python script.  When it is loaded,
 		// the main module will contain references to the functions that will be called.
@@ -185,7 +171,7 @@ PyObject *guaranteedTuple(PyObject *value) {
 		PyObject *globals = PyModule_GetDict(mainModule);
 		
 		// Load the Python file using PyRun_File and then call the actionProperty() function
-		PyRun_File(pyFile, [fullPath UTF8String], Py_file_input, globals, globals);
+		PyRun_File(pyFile, [path UTF8String], Py_file_input, globals, globals);
 		NSString *property = [self callFunction:@"actionProperty" ofModule:mainModule arguments:nil];
 				
 		NSMutableArray *arr = [_plugins objectForKey:property];
