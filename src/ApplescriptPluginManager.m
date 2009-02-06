@@ -12,6 +12,8 @@
 -(void)build;
 @end
 
+// Creates the 4-char code used by applescript to identify the application.  This means the user does not have to
+// hard-code the app class code somewhere in the application.
 unsigned long ASPluginAppClassCode() {
 	NSDictionary *infoPlist = [[NSBundle mainBundle] infoDictionary];
 	NSString *sig = [infoPlist objectForKey:@"CFBundleSignature"];
@@ -20,7 +22,6 @@ unsigned long ASPluginAppClassCode() {
 	code += [sig characterAtIndex:1] << 16;
 	code += [sig characterAtIndex:2] << 8;
 	code += [sig characterAtIndex:3];
-	
 	return code;
 }
 
