@@ -52,11 +52,10 @@ unsigned long ASPluginAppClassCode() {
 	{
 		NSAppleScript *as = [NSAppleScript appleScriptWithContentsOfFile:path];
 		if (!as) continue;
+		
 		NSAppleEventDescriptor *desc = [NSAppleEventDescriptor appleEventWithEventClass:ASPluginAppClassCode() eventID:ASPluginPropertyEventCode targetDescriptor:procDesc returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
 		id err = nil;
 		NSAppleEventDescriptor *ret = [as executeAppleEvent:desc error:&err];
-		NSLog(@"%s %@", _cmd, err);
-		NSLog(@"%s %@", _cmd, ret);
 		if (ret)
 		{
 			NSString *property = [ret stringValue];
@@ -77,6 +76,7 @@ unsigned long ASPluginAppClassCode() {
 	if (!arr || ![arr count]) return nil;
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+	NSLog(@"%s %@ %@", _cmd, NSStringFromClass([forValue class]), NSStringFromClass([withValue class]));
 	if (forValue) [parameters setObject:forValue forKey:[NSNumber numberWithUnsignedLong:ASPluginForCode]];
 	if (withValue) [parameters setObject:withValue forKey:[NSNumber numberWithUnsignedLong:ASPluginWithCode]];
 	
@@ -87,6 +87,7 @@ unsigned long ASPluginAppClassCode() {
 	while (as = [e nextObject])
 	{
 		NSAppleEventDescriptor *enabledDesc = [as executeEvent:ASPluginEnableEventCode eventClass:ASPluginAppClassCode() parameters:parameters];
+		NSLog(@"%s THERE", _cmd);
 		if (enabledDesc && [enabledDesc booleanValue])
 		{
 			NSAppleEventDescriptor *desc = [as executeEvent:ASPluginTitleEventCode eventClass:ASPluginAppClassCode() parameters:parameters];

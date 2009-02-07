@@ -61,8 +61,9 @@
 	
 	NSEnumerator *e = [parameters keyEnumerator];
 	NSNumber *key = nil;
-	while (key = [e nextObject])
+	while (key = [e nextObject]) {
 		[desc setParamDescriptor:[[parameters objectForKey:key] ASDescriptor] forKeyword:[key unsignedLongValue]];
+	}
 	
 	NSDictionary *errorDict = nil;
 	NSAppleEventDescriptor *returnDesc = [self executeAppleEvent:desc error:&errorDict];
@@ -128,6 +129,20 @@
 		desc = [NSAppleEventDescriptor descriptorWithString:(NSString *)self];
 	else if ([self isKindOfClass:[NSNumber class]])
 		desc = [NSAppleEventDescriptor descriptorWithInt32:[(NSNumber *)self intValue]];
+	else if ([self isKindOfClass:[NSDictionary class]]) {
+		desc = [NSAppleEventDescriptor recordDescriptor];
+		NSMutableArray *items = [NSMutableArray array];
+		for (NSString *key in [(NSDictionary *)self allKeys]) {
+			[items addObject:key];
+			[items addObject:[(NSDictionary *)self objectForKey:key]];
+		}
+		[desc setParamDescriptor:[items ASDescriptor] forKeyword:'usrf'];
+	}
+	else if ([self isKindOfClass:[NSArray class]]) {
+		desc = [NSAppleEventDescriptor listDescriptor];
+		unsigned int idx = 1;
+		for (id obj in (NSArray *)self) [desc insertDescriptor:[obj ASDescriptor] atIndex:idx++];
+	}
 	else if ([self respondsToSelector:@selector(objectSpecifier)])
 		desc = [[self objectSpecifier] _asDescriptor];
 	else
