@@ -17,9 +17,14 @@
 {
 	ABAddressBook *book = [ABAddressBook sharedAddressBook];
 	ABPerson *me = [book me];
+	ABMultiValue *mv = [me valueForProperty:kABPhoneProperty];
+	NSMutableArray *array = [NSMutableArray array];
+	unsigned int count = [mv count];
+	unsigned int idx = 0;
+	for (idx = 0; idx < count; idx++) [array addObject:[mv valueAtIndex:idx]];
 	NSDictionary *meDict = [NSDictionary dictionaryWithObjectsAndKeys:
 		[NSString stringWithFormat:@"%@ %@", [me valueForProperty:kABFirstNameProperty], [me valueForProperty:kABLastNameProperty], nil], @"name",
-			[me valueForProperty:kABPhoneProperty], @"phone", nil];
+			array, @"phone", nil];
 	self.me = meDict;
 }
 
@@ -27,6 +32,7 @@
 	id value = nil;
 	if ([sender tag] == 0) value = [self.me objectForKey:@"name"];
 	else if ([sender tag] == 1) value = [self.me objectForKey:@"phone"];
+	NSLog(@"%s %@", _cmd, self.me);
 	NSArray *plugins = [PluginManager pluginsForProperty:@"label-click" forValue:self.me withValue:value];
 	
 	NSMenu *m = [[[NSMenu alloc] initWithTitle:@"pluginMenu"] autorelease];

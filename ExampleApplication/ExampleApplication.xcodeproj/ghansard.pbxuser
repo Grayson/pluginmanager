@@ -90,9 +90,9 @@
 	};
 	1DC323600F3B75910011E197 /* NSApplescript+FCSAdditions.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {720, 2058}}";
-			sepNavSelRange = "{2754, 5}";
-			sepNavVisRange = "{2479, 623}";
+			sepNavIntBoundsRect = "{{0, 0}, {439, 2310}}";
+			sepNavSelRange = "{5748, 0}";
+			sepNavVisRange = "{5236, 504}";
 		};
 	};
 	1DC323C70F3B77990011E197 /* ExampleObjCPlugin */ = {
@@ -305,6 +305,42 @@
 		vrLen = 474;
 		vrLoc = 308;
 	};
+	1DD73CDB0F3D107F00552B38 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: 'NSObject' may not respond to '-objectForKey:'";
+		fRef = 1DC323600F3B75910011E197 /* NSApplescript+FCSAdditions.m */;
+		rLen = 1;
+		rLoc = 137;
+		rType = 1;
+	};
+	1DD73CDC0F3D107F00552B38 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1DC323600F3B75910011E197 /* NSApplescript+FCSAdditions.m */;
+		name = "NSApplescript+FCSAdditions.m: 154";
+		rLen = 0;
+		rLoc = 5620;
+		rType = 0;
+		vrLen = 399;
+		vrLoc = 5221;
+	};
+	1DD73CE50F3D119B00552B38 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: 'NSObject' may not respond to '-allKeys'";
+		fRef = 1DC323600F3B75910011E197 /* NSApplescript+FCSAdditions.m */;
+		rLen = 1;
+		rLoc = 135;
+		rType = 1;
+	};
+	1DD73CE60F3D119B00552B38 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1DC323600F3B75910011E197 /* NSApplescript+FCSAdditions.m */;
+		name = "NSApplescript+FCSAdditions.m: 156";
+		rLen = 0;
+		rLoc = 5748;
+		rType = 0;
+		vrLen = 434;
+		vrLoc = 5236;
+	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecture = i386;
 		activeBuildConfigurationName = Debug;
@@ -439,6 +475,10 @@
 			1DD73C7B0F3CFE1A00552B38 /* PBXTextBookmark */ = 1DD73C7B0F3CFE1A00552B38 /* PBXTextBookmark */;
 			1DD73C7C0F3CFE1A00552B38 /* PBXTextBookmark */ = 1DD73C7C0F3CFE1A00552B38 /* PBXTextBookmark */;
 			1DD73C7D0F3CFE1A00552B38 /* PBXTextBookmark */ = 1DD73C7D0F3CFE1A00552B38 /* PBXTextBookmark */;
+			1DD73CDB0F3D107F00552B38 /* PBXTextBookmark */ = 1DD73CDB0F3D107F00552B38 /* PBXTextBookmark */;
+			1DD73CDC0F3D107F00552B38 /* PBXTextBookmark */ = 1DD73CDC0F3D107F00552B38 /* PBXTextBookmark */;
+			1DD73CE50F3D119B00552B38 /* PBXTextBookmark */ = 1DD73CE50F3D119B00552B38 /* PBXTextBookmark */;
+			1DD73CE60F3D119B00552B38 /* PBXTextBookmark */ = 1DD73CE60F3D119B00552B38 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 1DC322F40F3B747D0011E197 /* Source Control */;
 		userBuildSettings = {
