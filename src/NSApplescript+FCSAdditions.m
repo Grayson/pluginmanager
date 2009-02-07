@@ -120,6 +120,8 @@
 
 @implementation NSObject (ASPrivateMethods)
 
+// Convenience method used above to convert standard types (and types with object specifiers) into a suitable
+// descriptor.
 -(NSAppleEventDescriptor *)ASDescriptor
 {
 	NSAppleEventDescriptor *desc = nil;
@@ -147,7 +149,7 @@
 		desc = [[self objectSpecifier] _asDescriptor];
 	else
 		desc = [NSAppleEventDescriptor nullDescriptor];
-	return desc;
+	return desc ? desc : [NSAppleEventDescriptor nullDescriptor];
 }
 
 @end

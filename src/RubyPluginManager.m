@@ -92,8 +92,11 @@
 
 -(id)runScriptAtPath:(NSString *)path
 {
+	NSString *rubyCode = [NSString stringWithContentsOfFile:path];
+	if (!rubyCode) return nil;
+	void *v = (void *)rb_eval_string([rubyCode UTF8String]);
+	// How do I get a return value from a script?  Can I with Ruby?
 	return nil;
-	// return [[NSAppleScript appleScriptWithContentsOfFile:path] executeAndReturnError:nil];
 }
 
 @end

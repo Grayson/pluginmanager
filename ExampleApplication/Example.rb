@@ -1,6 +1,9 @@
-require 'osx/cocoa'
-
-def actionProperty()
+# begin
+#   require "osx/cocoa"
+# rescue Exception=>e
+#   puts "Caught an exception"
+# end
+def actionProperty
   return "label-click"
 end
 
@@ -12,6 +15,6 @@ def actionTitle(withValue, forValue)
   return "Ruby example"
 end
 
-def actionEnable(withValue, forValue)
+def actionPerform(withValue, forValue)
   puts withValue
 end

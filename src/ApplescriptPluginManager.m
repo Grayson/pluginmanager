@@ -76,7 +76,6 @@ unsigned long ASPluginAppClassCode() {
 	if (!arr || ![arr count]) return nil;
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-	NSLog(@"%s %@ %@", _cmd, NSStringFromClass([forValue class]), NSStringFromClass([withValue class]));
 	if (forValue) [parameters setObject:forValue forKey:[NSNumber numberWithUnsignedLong:ASPluginForCode]];
 	if (withValue) [parameters setObject:withValue forKey:[NSNumber numberWithUnsignedLong:ASPluginWithCode]];
 	
@@ -87,7 +86,6 @@ unsigned long ASPluginAppClassCode() {
 	while (as = [e nextObject])
 	{
 		NSAppleEventDescriptor *enabledDesc = [as executeEvent:ASPluginEnableEventCode eventClass:ASPluginAppClassCode() parameters:parameters];
-		NSLog(@"%s THERE", _cmd);
 		if (enabledDesc && [enabledDesc booleanValue])
 		{
 			NSAppleEventDescriptor *desc = [as executeEvent:ASPluginTitleEventCode eventClass:ASPluginAppClassCode() parameters:parameters];

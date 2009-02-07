@@ -32,7 +32,6 @@
 	id value = nil;
 	if ([sender tag] == 0) value = [self.me objectForKey:@"name"];
 	else if ([sender tag] == 1) value = [self.me objectForKey:@"phone"];
-	NSLog(@"%s %@", _cmd, self.me);
 	NSArray *plugins = [PluginManager pluginsForProperty:@"label-click" forValue:self.me withValue:value];
 	
 	NSMenu *m = [[[NSMenu alloc] initWithTitle:@"pluginMenu"] autorelease];
