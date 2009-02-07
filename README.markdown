@@ -28,21 +28,20 @@ A short list of things that I'll be trying to take care of relatively quickly.
 
 * Testing
 * Code commenting
-* Write F-Script submanager
-* Write an example application
-* Write an example sdef for applescript support
 * Allow for dynamic loading of plugins based on user's installed 3rd party frameworks (useful so developers don't need to distribute the Nu framework, JSCocoa, or LuaCore in the application but can still offer that functionality for savvy users).
 * Write additional documentation describing the different plugins, language issues, and whatnot
 
 ## Necessary frameworks
 
-The Python, Ruby, Applescript, and Cocoa bundle submanagers only use frameworks that are instaled by default in OS X 10.5.  The Javascript, Nu, and Lua submanagers require additional downloads.  These frameworks can either be linked into the application or bundled with the app.
+The Python, Ruby, Applescript, and Cocoa bundle submanagers only use frameworks that are instaled by default in OS X 10.5.  The Javascript, Nu, Perl, and Lua submanagers require additional downloads.  These frameworks can either be linked into the application or bundled with the app.
 
 * [Nu](http://programming.nu/) - Nu is a great, newish language by Tim Burks.  I'm a big fan of Nu and have written several different components in it available on [Github](http://github.com/Grayson).  You can download Nu [here](http://programming.nu/downloads).
 
 * [JSCocoa](http://inexdo.com/JSCocoa) - JSCocoa connects Cocoa to the JavascriptCore found in Webkit/Safari.  It works wonders with easy integration in Objective-C applications.  You can even use it as a framework or by compiling it directly into the code.  It can be downloaded from its [Github page](http://github.com/parmanoir/jscocoa/tree/master).
 
 * [LuaCore](http://gusmueller.com/lua/) - Lua was one of my favorite plugin languages for a long time since it is so easily integrated with C.  Although I've rolled my own code around the [LuaObjCBridge](http://luaforge.net/projects/luaobjcbridge/), I decided to go with Gus Mueller's LuaCore framework for this project.  It can be downloaded from its [project page](http://gusmueller.com/lua/).
+
+* [CamelBones](http://camelbones.sourceforge.net/index.html) - CamelBones provides Perl support.  However, I have to encourage lots of testing prior to using it.  I had problems getting a version of CamelBones that worked on my Mac and I've heard that there are some problems based on which version of Perl you're using or which processor your Mac uses.  Just the same, I'm assuming that if you have a version of CamelBones that works for you, the plugin manager will work as well.
 
 ## Contact information
 
@@ -71,7 +70,8 @@ I skimmed a lot of mailing lists and documentation to figure how to make some of
 * [Patrick Geiller](http://parmanoir.com/) - Mr. Geiller created the JSCocoa package/framework.  This was a massive boon in adding a Javascript plugin manager.
 * [Contributors to PyObjC](http://pyobjc.sourceforge.net/) - PyObjC is great.  I love Python and PyObjC is magic.  There were a few quirks that I had to work around, but once I got my head around it, PyObjC made everything else really easy.
 * [Contributors to RubyCocoa](http://rubycocoa.sourceforge.net/HomePage) - Like PyObjC, RubyCocoa is really easy to use and really lowered the barrier to entry in working with Ruby.  I don't use Ruby and am rather unfamiliar with the language, but RubyCocoa was really easy to use and get working as I expected.
+* [Sherm Pendley](http://camelbones.sourceforge.net/) - CamelBones was a very early bridge and despite the fact that it often gets forgotten about, it's still pretty good.  There's a lot of good work there and I'm not aware of any other Cocoa-Perl bridge.  I sure wasn't about to write one so if you use PluginManager's Perl support, thank Mr. Pendley.
 
 ## Known bugs
 
-* Ruby has a conflict with Nu's version of NSString's `chomp` method.  This can be worked around for the moment by wrapping `require 'osx/cocoa'` in an exception handling block (`begin...rescue Exception => e...end`).
+* Ruby support is wacky.  I mean, I've tried to make it as solid as I could, but it seems like there's frequently something going wrong with it internally.  Sometimes, I'll get something working and it'll stop working spontaneously later in the day (with no other changes to the app or the Ruby script).  I'll continue trying to debug the issue, but avoid using `require 'osx/cocoa'` if you can help it.  If you can help me, please let me know what is going wrong so I can fix it.
