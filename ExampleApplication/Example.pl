@@ -1,4 +1,5 @@
-use Foundation;
+# use Foundation;
+use CamelBones qw(:All);
 
 sub actionProperty {
 	return "label-click";
@@ -16,5 +17,5 @@ sub actionTitle {
 
 sub actionPerform {
 	my ($withValue, $forValue) = @_;
-	print($withValue);
+	print $withValue->description();
 }
