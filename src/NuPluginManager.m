@@ -13,7 +13,7 @@
 
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	[PluginManager registerManager:[[self new] autorelease]];
+	if (NSClassFromString(@"Nu")) [PluginManager registerManager:[[self new] autorelease]];
 	[pool release];
 }
 

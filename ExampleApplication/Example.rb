@@ -1,8 +1,3 @@
-# begin
-#   require "osx/cocoa"
-# rescue Exception=>e
-#   puts "Caught an exception"
-# end
 def actionProperty
   return "label-click"
 end

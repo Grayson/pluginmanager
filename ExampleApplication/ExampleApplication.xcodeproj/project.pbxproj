@@ -18,16 +18,13 @@
 		1DC323EC0F3B795E0011E197 /* ExampleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323EB0F3B795E0011E197 /* ExampleController.m */; };
 		1DC3242E0F3B87190011E197 /* Example.scpt in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1DC3242B0F3B870C0011E197 /* Example.scpt */; };
 		1DC324320F3B89D30011E197 /* ExampleApplication.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 1DC324310F3B89D30011E197 /* ExampleApplication.sdef */; };
-		1DD73B2E0F3CA0DE00552B38 /* Example.rb in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1DD73B270F3CA06500552B38 /* Example.rb */; };
 		1DD73BBF0F3CD14200552B38 /* PythonPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323080F3B74FA0011E197 /* PythonPluginManager.m */; };
 		1DD73BC20F3CD19700552B38 /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC3234F0F3B752B0011E197 /* Python.framework */; };
 		1DD73BF90F3CD78100552B38 /* FScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC323150F3B751A0011E197 /* FScript.framework */; };
 		1DD73BFA0F3CD78300552B38 /* JSCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC323160F3B751A0011E197 /* JSCocoa.framework */; };
 		1DD73BFB0F3CD78300552B38 /* LuaCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC323650F3B75C70011E197 /* LuaCore.framework */; };
-		1DD73BFC0F3CD78400552B38 /* Nu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC323140F3B751A0011E197 /* Nu.framework */; };
 		1DD73C010F3CD7E200552B38 /* LuaPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322FE0F3B74FA0011E197 /* LuaPluginManager.m */; };
 		1DD73C020F3CD7E400552B38 /* JavascriptPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322FC0F3B74FA0011E197 /* JavascriptPluginManager.m */; };
-		1DD73C030F3CD7E600552B38 /* NuPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323000F3B74FA0011E197 /* NuPluginManager.m */; };
 		1DD73C040F3CD7E700552B38 /* ObjCPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323020F3B74FA0011E197 /* ObjCPluginManager.m */; };
 		1DD73C060F3CD7F200552B38 /* Example.js in Sources */ = {isa = PBXBuildFile; fileRef = 1DD73C050F3CD7F200552B38 /* Example.js */; };
 		1DD73C0F0F3CD85600552B38 /* Example.lua in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1DD73BFF0F3CD7D000552B38 /* Example.lua */; };
@@ -41,6 +38,10 @@
 		1DD73C610F3CFA9F00552B38 /* NSApplication+Applescript.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD73C600F3CFA9F00552B38 /* NSApplication+Applescript.m */; };
 		1DD73C6D0F3CFBDE00552B38 /* ApplescriptPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322F80F3B74FA0011E197 /* ApplescriptPluginManager.m */; };
 		1DF38D770F3DE9AA00431004 /* RubyPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC3230A0F3B74FA0011E197 /* RubyPluginManager.m */; };
+		1DF38DD00F3E19CC00431004 /* CamelBones.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF38DCF0F3E19CC00431004 /* CamelBones.framework */; };
+		1DF38DE60F3E19DF00431004 /* PerlPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF38DE40F3E19DF00431004 /* PerlPluginManager.m */; };
+		1DF38DEB0F3E205F00431004 /* Example.pl in Resources */ = {isa = PBXBuildFile; fileRef = 1DF38DEA0F3E205F00431004 /* Example.pl */; };
+		1DF38DF70F3E20C400431004 /* Example.pl in Copy plugins */ = {isa = PBXBuildFile; fileRef = 1DF38DEA0F3E205F00431004 /* Example.pl */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -64,8 +65,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				1DF38DF70F3E20C400431004 /* Example.pl in Copy plugins */,
 				1DD73C5A0F3CF93500552B38 /* Example.py in Copy plugins */,
-				1DD73B2E0F3CA0DE00552B38 /* Example.rb in Copy plugins */,
 				1DD73C0F0F3CD85600552B38 /* Example.lua in Copy plugins */,
 				1DD73C100F3CD85600552B38 /* Example.js in Copy plugins */,
 				1DD73C110F3CD85600552B38 /* Example.fscript in Copy plugins */,
@@ -129,6 +130,10 @@
 		1DD73C0B0F3CD83E00552B38 /* Example.nu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Example.nu; sourceTree = "<group>"; };
 		1DD73C5F0F3CFA9F00552B38 /* NSApplication+Applescript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSApplication+Applescript.h"; sourceTree = "<group>"; };
 		1DD73C600F3CFA9F00552B38 /* NSApplication+Applescript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSApplication+Applescript.m"; sourceTree = "<group>"; };
+		1DF38DCF0F3E19CC00431004 /* CamelBones.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CamelBones.framework; path = /Library/Frameworks/CamelBones.framework; sourceTree = "<absolute>"; };
+		1DF38DE40F3E19DF00431004 /* PerlPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerlPluginManager.m; sourceTree = "<group>"; };
+		1DF38DE50F3E19DF00431004 /* PerlPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerlPluginManager.h; sourceTree = "<group>"; };
+		1DF38DEA0F3E205F00431004 /* Example.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; path = Example.pl; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -159,8 +164,8 @@
 				1DD73BF90F3CD78100552B38 /* FScript.framework in Frameworks */,
 				1DD73BFA0F3CD78300552B38 /* JSCocoa.framework in Frameworks */,
 				1DD73BFB0F3CD78300552B38 /* LuaCore.framework in Frameworks */,
-				1DD73BFC0F3CD78400552B38 /* Nu.framework in Frameworks */,
 				1DD73C300F3CD9C800552B38 /* Carbon.framework in Frameworks */,
+				1DF38DD00F3E19CC00431004 /* CamelBones.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +213,8 @@
 		1DC322F60F3B74FA0011E197 /* PluginManager */ = {
 			isa = PBXGroup;
 			children = (
+				1DF38DE40F3E19DF00431004 /* PerlPluginManager.m */,
+				1DF38DE50F3E19DF00431004 /* PerlPluginManager.h */,
 				1DC3235F0F3B75910011E197 /* NSApplescript+FCSAdditions.h */,
 				1DC323600F3B75910011E197 /* NSApplescript+FCSAdditions.m */,
 				1DC322F70F3B74FA0011E197 /* ApplescriptPluginManager.h */,
@@ -267,6 +274,7 @@
 				1DD73C050F3CD7F200552B38 /* Example.js */,
 				1DD73C090F3CD82400552B38 /* Example.fscript */,
 				1DD73C0B0F3CD83E00552B38 /* Example.nu */,
+				1DF38DEA0F3E205F00431004 /* Example.pl */,
 			);
 			name = PlugIns;
 			sourceTree = "<group>";
@@ -314,6 +322,7 @@
 				1DC323140F3B751A0011E197 /* Nu.framework */,
 				1DC323150F3B751A0011E197 /* FScript.framework */,
 				1DC323160F3B751A0011E197 /* JSCocoa.framework */,
+				1DF38DCF0F3E19CC00431004 /* CamelBones.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -393,6 +402,7 @@
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DC324320F3B89D30011E197 /* ExampleApplication.sdef in Resources */,
+				1DF38DEB0F3E205F00431004 /* Example.pl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,7 +428,6 @@
 				1DD73BBF0F3CD14200552B38 /* PythonPluginManager.m in Sources */,
 				1DD73C010F3CD7E200552B38 /* LuaPluginManager.m in Sources */,
 				1DD73C020F3CD7E400552B38 /* JavascriptPluginManager.m in Sources */,
-				1DD73C030F3CD7E600552B38 /* NuPluginManager.m in Sources */,
 				1DD73C040F3CD7E700552B38 /* ObjCPluginManager.m in Sources */,
 				1DD73C060F3CD7F200552B38 /* Example.js in Sources */,
 				1DD73C2B0F3CD9A300552B38 /* FScriptPlugInManager.m in Sources */,
@@ -426,6 +435,7 @@
 				1DD73C610F3CFA9F00552B38 /* NSApplication+Applescript.m in Sources */,
 				1DD73C6D0F3CFBDE00552B38 /* ApplescriptPluginManager.m in Sources */,
 				1DF38D770F3DE9AA00431004 /* RubyPluginManager.m in Sources */,
+				1DF38DE60F3E19DF00431004 /* PerlPluginManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
