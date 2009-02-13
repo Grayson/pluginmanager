@@ -16,6 +16,8 @@
 	Class RBObject;
 }
 
+@property (retain) NSMutableDictionary *plugins;
+
 -(NSString *)name;
 -(NSArray *)extensions;
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue;

@@ -11,6 +11,8 @@
 
 @implementation FScriptPlugInManager
 
+@synthesize plugins = _plugins;
+
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	// Assume that the framework exists if strings can respond to `asBlock`.
@@ -30,10 +32,16 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	[self setPlugins:nil];
+	[super dealloc];
+}
+
 - (void)build
 {
-	if (_plugins) [_plugins release];
-	_plugins = [NSMutableDictionary new];
+	NSMutableDictionary *plugins = [NSMutableDictionary dictionary];
+	self.plugins = plugins;
 	for (NSString *path in [PluginManager pluginFilesForSubmanager:self])
 	{
 		FSInterpreter *interpreter = [FSInterpreter interpreter];
@@ -49,18 +57,18 @@
 		NSString *property = [b value];
 		if (property && [property isKindOfClass:[NSString class]])
 		{
-			NSMutableArray *arr = [_plugins objectForKey:property];
+			NSMutableArray *arr = [plugins objectForKey:property];
 			if (!arr) arr = [NSMutableArray array];
 			[arr addObject:interpreter];
-			[_plugins setObject:arr forKey:property];						
+			[plugins setObject:arr forKey:property];						
 		}
 	}
 }
 
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
 {
-	if (!_plugins) [self build];
-	NSArray *plugins = [_plugins objectForKey:property];
+	if (!self.plugins) [self build];
+	NSArray *plugins = [self.plugins objectForKey:property];
 	if (!plugins || ![plugins count]) return nil;
 	
 	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];

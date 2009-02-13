@@ -14,9 +14,11 @@
 
 @implementation RubyPluginManager
 
+@synthesize plugins = _plugins;
+
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	[PluginManager registerManager:[[self new] autorelease]];
+	if (NSClassFromString(@"RBObject")) [PluginManager registerManager:[[self new] autorelease]];
 	[pool release];
 }
 
@@ -37,8 +39,8 @@
 
 -(void)build
 {
-	if (_plugins) [_plugins release];
-	_plugins = [NSMutableDictionary new];
+	NSMutableDictionary *plugins = [NSMutableDictionary dictionary];
+	self.plugins = plugins;
 	
 	for (NSString *scriptPath in [PluginManager pluginFilesForSubmanager:self])
 	{
@@ -52,10 +54,10 @@
 		// simply by calling the function name as a proxy method.  Here, it'll be calling `actionProperty()`
 		// from the loaded script.
 		NSString *property = [rb actionProperty];
-		NSMutableArray *arr = [_plugins objectForKey:property];
+		NSMutableArray *arr = [plugins objectForKey:property];
 		if (!arr) arr = [NSMutableArray array];
 		[arr addObject:rb];
-		[_plugins setObject:arr forKey:property];
+		[plugins setObject:arr forKey:property];
 	}
 }
 
@@ -63,8 +65,8 @@
 -(NSArray *)extensions { return [NSArray arrayWithObject:@"rb"]; }
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
 {
-	if (!_plugins) [self build];
-	NSArray *arr = [_plugins objectForKey:property];
+	if (!self.plugins) [self build];
+	NSArray *arr = [self.plugins objectForKey:property];
 	if (!arr || ![arr count]) return nil;
 	
 	NSEnumerator *pluginEnumerator = [arr objectEnumerator];

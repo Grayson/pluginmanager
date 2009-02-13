@@ -11,6 +11,8 @@
 
 @implementation NuPluginManager
 
+@synthesize plugins = _plugins;
+
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	if (NSClassFromString(@"Nu")) [PluginManager registerManager:[[self new] autorelease]];
@@ -28,10 +30,16 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	self.plugins = nil;
+	[super dealloc];
+}
+
 - (void)build
 {
-	if (_plugins) [_plugins release];
-	_plugins = [NSMutableDictionary new];
+	NSMutableDictionary *plugins = [NSMutableDictionary dictionary];
+	self.plugins = plugins;
 	for (NSString *path in [PluginManager pluginFilesForSubmanager:self])
 	{
 		id parser = [Nu parser];
@@ -39,18 +47,18 @@
 		[parser parseEval:nuCode];
 		NSString *property = [parser parseEval:@"(actionProperty)"];
 		
-		NSMutableArray *arr = [_plugins objectForKey:property];
+		NSMutableArray *arr = [plugins objectForKey:property];
 		if (!arr) arr = [NSMutableArray array];
 		[arr addObject:nuCode];
-		[_plugins setObject:arr forKey:property];
+		[plugins setObject:arr forKey:property];
 		[parser close];
 	}
 }
 
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
 {
-	if (!_plugins) [self build];
-	NSArray *plugins = [_plugins objectForKey:property];
+	if (!self.plugins) [self build];
+	NSArray *plugins = [self.plugins objectForKey:property];
 	if (!plugins || ![plugins count]) return nil;
 	
 	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];

@@ -22,6 +22,8 @@ typedef struct {
 	NSMutableDictionary *_plugins;
 }
 
+@property (retain) NSMutableDictionary *plugins;
+
 -(NSString *)name;
 -(NSArray *)extensions;
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)value;

@@ -27,6 +27,8 @@ unsigned long ASPluginAppClassCode() {
 
 @implementation ApplescriptPluginManager
 
+@synthesize plugins = _plugins;
+
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	[PluginManager registerManager:[[self new] autorelease]];
@@ -41,10 +43,16 @@ unsigned long ASPluginAppClassCode() {
 	return self;
 }
 
+- (void)dealloc
+{
+	self.plugins = nil;
+	[super dealloc];
+}
+
 -(void)build
 {
-	if (_plugins) [_plugins release];
-	_plugins = [NSMutableDictionary new];
+	NSMutableDictionary *plugins = [NSMutableDictionary dictionary];
+	[self setPlugins:plugins];
 	
 	NSArray *foundPlugins = [PluginManager pluginFilesForSubmanager:self];
 	NSAppleEventDescriptor *procDesc = [NSAppleScript processDescriptor];
@@ -59,10 +67,10 @@ unsigned long ASPluginAppClassCode() {
 		if (ret)
 		{
 			NSString *property = [ret stringValue];
-			NSMutableArray *arr = [_plugins objectForKey:property];
+			NSMutableArray *arr = [plugins objectForKey:property];
 			if (!arr) arr = [NSMutableArray array];
 			[arr addObject:as];
-			[_plugins setObject:arr forKey:property];
+			[plugins setObject:arr forKey:property];
 		}
 	}
 }
@@ -71,8 +79,8 @@ unsigned long ASPluginAppClassCode() {
 -(NSArray *)extensions { return [NSArray arrayWithObject:@"scpt"]; }
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
 {
-	if (!_plugins) [self build];
-	NSArray *arr = [_plugins objectForKey:property];
+	if ([self plugins]) [self build];
+	NSArray *arr = [[self plugins] objectForKey:property];
 	if (!arr || ![arr count]) return nil;
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionary];

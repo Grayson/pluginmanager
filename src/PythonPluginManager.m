@@ -134,6 +134,8 @@ PyObject *guaranteedTuple(PyObject *value) {
 
 @implementation PythonPluginManager
 
+@synthesize plugins = _plugins;
+
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	[PluginManager registerManager:[[self new] autorelease]];
@@ -155,15 +157,15 @@ PyObject *guaranteedTuple(PyObject *value) {
 
 - (void)dealloc
 {
-	[_plugins release];
+	self.plugins = nil;
 	Py_Finalize();
 	[super dealloc];
 }
 
 - (void)build
 {
-	if (_plugins) [_plugins release];
-	_plugins = [NSMutableDictionary new];
+	NSMutableDictionary *plugins = [NSMutableDictionary dictionary];
+	self.plugins = plugins;
 	for (NSString *path in [PluginManager pluginFilesForSubmanager:self]) {
 		Py_SetProgramName("/usr/bin/python");
 		FILE *pyFile = fopen([path fileSystemRepresentation], "r");
@@ -177,17 +179,17 @@ PyObject *guaranteedTuple(PyObject *value) {
 		PyRun_File(pyFile, [path UTF8String], Py_file_input, globals, globals);
 		NSString *property = [self callFunction:@"actionProperty" ofModule:mainModule arguments:nil];
 				
-		NSMutableArray *arr = [_plugins objectForKey:property];
+		NSMutableArray *arr = [plugins objectForKey:property];
 		if (!arr) arr = [NSMutableArray array];
 		[arr addObject:[NSValue valueWithPointer:mainModule]];
-		[_plugins setObject:arr forKey:property];
+		[plugins setObject:arr forKey:property];
 	}
 }
 
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
 {
-	if (!_plugins) [self build];
-	NSArray *plugins = [_plugins objectForKey:property];
+	if (!self.plugins) [self build];
+	NSArray *plugins = [self.plugins objectForKey:property];
 	if (!plugins || ![plugins count]) return nil;
 	
 	NSEnumerator *pluginEnumerator = [plugins objectEnumerator];

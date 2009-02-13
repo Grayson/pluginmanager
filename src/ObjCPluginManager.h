@@ -19,6 +19,8 @@ enum {
 	NSMutableDictionary *_plugins;
 }
 
+@property (retain) NSMutableDictionary *plugins;
+
 -(NSString *)name;
 -(NSArray *)extensions;
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)value;
@@ -26,9 +28,6 @@ enum {
 -(id)runScriptAtPath:(NSString *)path;
 
 -(BOOL)canRunAsScript;
-
-- (NSMutableDictionary *)plugins;
-- (void)setPlugins:(NSMutableDictionary *)aValue;
 
 @end
 

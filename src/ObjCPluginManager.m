@@ -11,6 +11,8 @@
 
 @implementation ObjCPluginManager
 
+@synthesize plugins = _plugins;
+
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	[PluginManager registerManager:[[self new] autorelease]];
@@ -30,7 +32,7 @@
 
 - (void)dealloc
 {
-	[self setPlugins:nil];
+	self.plugins = nil;
 	[super dealloc];
 }
 
@@ -135,16 +137,5 @@
 
 -(BOOL)canRunAsScript { return YES; }
 
-- (NSMutableDictionary *)plugins
-{
-	return _plugins;
-}
-
-- (void)setPlugins:(NSMutableDictionary *)aValue
-{
-	NSMutableDictionary *oldPlugins = _plugins;
-	_plugins = [aValue retain];
-	[oldPlugins release];
-}
 
 @end
