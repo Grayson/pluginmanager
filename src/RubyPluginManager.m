@@ -88,9 +88,8 @@
 {
 	NSString *rubyCode = [NSString stringWithContentsOfFile:path];
 	if (!rubyCode) return nil;
-	/*void *v = */(void *)rb_eval_string([rubyCode UTF8String]);
-	// How do I get a return value from a script?  Can I with Ruby?
-	return nil;
+	VALUE ret = rb_eval_string([rubyCode UTF8String]);
+	return RB2OC(ret);
 }
 
 - (id)callRubyMethod:(NSString *)method ofScript:(VALUE)script withArguments:(NSArray *)args {
