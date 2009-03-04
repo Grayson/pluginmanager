@@ -10,6 +10,7 @@
 
 @interface RubyPluginManager (PrivateMethods)
 -(void)build;
+- (id)callRubyMethod:(NSString *)method ofScript:(VALUE)script withArguments:(NSArray *)args;
 @end
 
 @implementation RubyPluginManager
@@ -35,34 +36,21 @@
 	NSMutableDictionary *plugins = [NSMutableDictionary dictionary];
 	self.plugins = plugins;
 	
+	[MacRuby sharedRuntime];
 	for (NSString *scriptPath in [PluginManager pluginFilesForSubmanager:self])
 	{
-		// Could it be any easier to load a Ruby script with RubyCocoa?  Simply get a script as an NSString
-		// and load it using RBObjectWithRubyScriptString:.
-		MacRuby *ruby = [MacRuby sharedRuntime];
-		// id x = [ruby evaluateFileAtPath:scriptPath];
-		// NSLog(@"%s %@", _cmd, x);
 		VALUE script = rb_eval_string([[NSString stringWithContentsOfFile:scriptPath] UTF8String]);
-		NSLog(@"%s WTF IS GOING ON?", _cmd);
+		NSString *property = [self callRubyMethod:@"actionProperty" ofScript:script withArguments:nil];
 		
-		VALUE ret = rb_funcall(script, rb_intern("actionPerform"), 2, OC2RB(self), OC2RB(@"asdf"));
-		NSLog(@"%s %@", _cmd, RB2OC(ret));
-		
-		return;
-		
-		// // RBObjects are really NSProxies.  RubyCocoa makes it easy to call functions in a Ruby script
-		// // simply by calling the function name as a proxy method.  Here, it'll be calling `actionProperty()`
-		// // from the loaded script.
-		// NSString *property = [rb actionProperty];
-		// NSMutableArray *arr = [plugins objectForKey:property];
-		// if (!arr) arr = [NSMutableArray array];
-		// [arr addObject:rb];
-		// [plugins setObject:arr forKey:property];
+		NSMutableArray *arr = [plugins objectForKey:property];
+		if (!arr) arr = [NSMutableArray array];
+		[arr addObject:[NSValue valueWithPointer:(const void *)script]];
+		[plugins setObject:arr forKey:property];
 	}
 }
 
 -(NSString *)name { return @"Ruby"; }
--(NSArray *)extensions { return [NSArray arrayWithObject:@"rb"]; }
+-(NSArray *)extensions { return [NSArray arrayWithObjects:@"rb", @"ruby", nil]; }
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
 {
 	if (!self.plugins) [self build];
@@ -72,11 +60,14 @@
 	NSEnumerator *pluginEnumerator = [arr objectEnumerator];
 	id rb;
 	NSMutableArray *ret = [NSMutableArray array];
+	NSArray *arguments = [NSArray arrayWithObjects:forValue ? forValue : [NSNull null], withValue ? withValue : [NSNull null], nil];
 	while (rb = [pluginEnumerator nextObject])
 	{
-		if ([rb actionEnable:nil :nil]) 
+		VALUE script = (VALUE)[rb pointerValue];
+		NSNumber *shouldEnable = [self callRubyMethod:@"actionEnable" ofScript:script withArguments:arguments];
+		if ([shouldEnable boolValue]) 
 			[ret addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-				[rb actionTitle:nil :nil], @"title",
+				[self callRubyMethod:@"actionTitle" ofScript:script withArguments:arguments], @"title",
 				rb, @"plugin",
 				forValue, @"forValue",
 				withValue, @"value",
@@ -89,7 +80,8 @@
 -(void)runPlugin:(NSDictionary *)plugin forValue:(id)forValue withValue:(id)withValue
 {
 	id rb = [plugin objectForKey:@"plugin"];
-	[rb actionPerform:forValue :withValue];
+	NSArray *arguments = [NSArray arrayWithObjects:forValue ? forValue : [NSNull null], withValue ? withValue : [NSNull null], nil];
+	[self callRubyMethod:@"actionPerform" ofScript:(VALUE)[rb pointerValue] withArguments:arguments];
 }
 
 -(id)runScriptAtPath:(NSString *)path
@@ -98,6 +90,15 @@
 	if (!rubyCode) return nil;
 	/*void *v = */(void *)rb_eval_string([rubyCode UTF8String]);
 	// How do I get a return value from a script?  Can I with Ruby?
+	return nil;
+}
+
+- (id)callRubyMethod:(NSString *)method ofScript:(VALUE)script withArguments:(NSArray *)args {
+	VALUE rubyArgs[ [args count] ];
+	unsigned int idx = 0;
+	for (id arg in args) rubyArgs[idx++] = OC2RB(arg);
+	VALUE ret = rb_funcall2(script, rb_intern([method UTF8String]), [args count], rubyArgs);
+	if (ret) return RB2OC(ret);
 	return nil;
 }
 
