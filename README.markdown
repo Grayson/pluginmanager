@@ -12,15 +12,9 @@ The second design pattern is in using the actual plugins.  When a sub-manager lo
 
 As a third option, you can usually just call `runScriptAtPath:` to execute a script at a particular path.  This won't work for Cocoa bundles at the moment, but I've got an idea or two.
 
-## A Few Caveats
+## Please note the following
 
-* Wherever possible, I made the decision to only use frameworks that were available as the stock install.  I'd love to use a custom build of PyObjC or MacRuby, but I made a concerted effort to only work with what was installed by default on Mac OS X 10.5.  However, in order to use other plugin managers, you'll have to download and install the Nu framework, a Lua bridge framework, and others as appropriate.  Frameworks and download locations necessary for managers that are not bundled with OS X 10.5 are listed below.
-
-* Some of the languages don't play nicely.  Off the top of my head, I'm thinking about a conflict between Nu's `chomp` method and Ruby's.  They have different arities and Ruby will throw an exception when it finds chomp.  I will document these as they come up under the Bugs section below.  If anyone knows how to fix these, please let me know.  If you want all of the languages active in one application, please be sure to test thoroughly and share any insights so they can be documented here.
-
-* At present, the plugin managers are not optimized for performance in any sense.  They inherited a half-thought out design pattern and my first instinct was to just get them to work.  I'll go back and make them more memory-efficient in the near future, but you should certain test for memory usage before shipping.  Right now, I consider this code to be proof of concept rather than shipping quality.
-
-* There are a few other issues that will be discussed in more detail in the documentation about the plugins whenever I get around to writing it (hopefully sooner rather than later).
+At present, the plugin managers are not optimized for performance in any sense.  They inherited a half-thought out design pattern and my first instinct was to just get them to work.  I'll go back and make them more memory-efficient in the near future, but you should certain test for memory usage before shipping.  Right now, I consider this code to be proof of concept rather than shipping quality.
 
 ## Todo
 
@@ -37,11 +31,13 @@ The Python, Ruby, Applescript, and Cocoa bundle submanagers only use frameworks 
 
 * [Nu](http://programming.nu/) - Nu is a great, newish language by Tim Burks.  I'm a big fan of Nu and have written several different components in it available on [Github](http://github.com/Grayson).  You can download Nu [here](http://programming.nu/downloads).
 
+* [MacRuby](http://www.macruby.org/) - Sure, [RubyCocoa](http://rubycocoa.sourceforge.net/) is included with Mac OS X, but I got tired of fighting with it.  MacRuby is a pain in a lot of ways, but it's less buggy and much easier to work with than RubyCocoa.  I still wish I could have gotten RC to work, but if you want Ruby, you'll need to get MacRuby as well.  Make sure to read the note below if using MacRuby.
+
 * [JSCocoa](http://inexdo.com/JSCocoa) - JSCocoa connects Cocoa to the JavascriptCore found in Webkit/Safari.  It works wonders with easy integration in Objective-C applications.  You can even use it as a framework or by compiling it directly into the code.  It can be downloaded from its [Github page](http://github.com/parmanoir/jscocoa/tree/master).
 
 * [LuaCore](http://gusmueller.com/lua/) - Lua was one of my favorite plugin languages for a long time since it is so easily integrated with C.  Although I've rolled my own code around the [LuaObjCBridge](http://luaforge.net/projects/luaobjcbridge/), I decided to go with Gus Mueller's LuaCore framework for this project.  It can be downloaded from its [project page](http://gusmueller.com/lua/).
 
-* [CamelBones](http://camelbones.sourceforge.net/index.html) - CamelBones provides Perl support.  However, I have to encourage lots of testing prior to using it.  I had problems getting a version of CamelBones that worked on my Mac and I've heard that there are some problems based on which version of Perl you're using or which processor your Mac uses.  Just the same, I'm assuming that if you have a version of CamelBones that works for you, the plugin manager will work as well.
+* [CamelBones](http://camelbones.sourceforge.net/index.html) - CamelBones provides Perl support.  However, I have to encourage lots of testing prior to using it.  I had problems getting a version of CamelBones that worked on my Mac and I've heard that there are some problems based on which version of Perl you're using or which processor your Mac uses.  Just the same, I'm assuming that if you have a version of CamelBones that works for you, the plugin manager will work as well.  If you want Perl and Ruby support in the same application, make sure you read the note below on MacRuby.
 
 ## Contact information
 
@@ -72,6 +68,10 @@ I skimmed a lot of mailing lists and documentation to figure how to make some of
 * [Contributors to RubyCocoa](http://rubycocoa.sourceforge.net/HomePage) - Like PyObjC, RubyCocoa is really easy to use and really lowered the barrier to entry in working with Ruby.  I don't use Ruby and am rather unfamiliar with the language, but RubyCocoa was really easy to use and get working as I expected.
 * [Sherm Pendley](http://camelbones.sourceforge.net/) - CamelBones was a very early bridge and despite the fact that it often gets forgotten about, it's still pretty good.  There's a lot of good work there and I'm not aware of any other Cocoa-Perl bridge.  I sure wasn't about to write one so if you use PluginManager's Perl support, thank Mr. Pendley.
 
-## Known bugs
+## A note about MacRuby
 
-* Ruby support is wacky.  I mean, I've tried to make it as solid as I could, but it seems like there's frequently something going wrong with it internally.  Sometimes, I'll get something working and it'll stop working spontaneously later in the day (with no other changes to the app or the Ruby script).  I'll continue trying to debug the issue, but avoid using `require 'osx/cocoa'` if you can help it.  If you can help me, please let me know what is going wrong so I can fix it.
+I tried really hard to make RubyCocoa support work.  I really did.  But nothing seemed to go right.  There were a ton of weird bugs and crashes that I got tired of trying to work around.  I actually like RubyCocoa and would have preferred it to MacRuby for a few reasons (no garbage collection requirement, installed on OSX, better convenience methods), but I couldn't make it work.  Maybe I'll return to it and try again in the future.
+
+However, I went with MacRuby.  It has a lot going for it and it worked for me.  Unfortunately, it has one rather sizeable issue: it require's Objective-C's new garbage collection.  That may not sound like a bit deal, but it can be a problem if you're integrating plugins into a large codebase.  You'll need to turn on garbage collection support (-fobjc-gc) for your project (which isn't too big of a deal), but you'll also need to make sure all of your frameworks, loadable bundles, and other stuff are also garbage collection-supported.  For small projects, this may not be a big deal.  For larger ones, this could be a deal breaker.  Regardless, expect to see a lot of junk in the console when you turn on garbage collection and expect to crash until you update all of the compiled bits that your app depends on.
+
+For those of you who want to include Perl and Ruby in one project, I have bad news for you.  I tried to find a way to compile CamelBones with garbage collection.  As may be expected, that did *not* work very well.  I haven't exactly racked my brain trying to figure this out, but I also don't really see many options here.  This may be an instance where you have to pick one.  Since CamelBones is kind of iffy anyway (you'll need to compile your own version for Leopard) and, perhaps, dying code, you may want to side with Ruby here.  However, since Ruby support means turning on garbage collection support, it may be easier to just go with Perl.  Again, I'll continue to evaluate RubyCocoa and incorporate it when possible.

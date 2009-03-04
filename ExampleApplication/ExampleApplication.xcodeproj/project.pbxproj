@@ -9,6 +9,15 @@
 /* Begin PBXBuildFile section */
 		1D973ECE0F3BE83900437B6D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D973ECD0F3BE83900437B6D /* AddressBook.framework */; };
 		1D9787380F5EED730093EA87 /* MacRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D9787370F5EED730093EA87 /* MacRuby.framework */; };
+		1D9787B30F5F06780093EA87 /* FScriptPlugInManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322FA0F3B74FA0011E197 /* FScriptPlugInManager.m */; };
+		1D9787B40F5F06790093EA87 /* ApplescriptPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322F80F3B74FA0011E197 /* ApplescriptPluginManager.m */; };
+		1D9787B50F5F067A0093EA87 /* JavascriptPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322FC0F3B74FA0011E197 /* JavascriptPluginManager.m */; };
+		1D9787B60F5F067A0093EA87 /* LuaPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC322FE0F3B74FA0011E197 /* LuaPluginManager.m */; };
+		1D9787B70F5F067B0093EA87 /* NSApplescript+FCSAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323600F3B75910011E197 /* NSApplescript+FCSAdditions.m */; };
+		1D9787B80F5F067C0093EA87 /* NuPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323000F3B74FA0011E197 /* NuPluginManager.m */; };
+		1D9787B90F5F067D0093EA87 /* ObjCPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323020F3B74FA0011E197 /* ObjCPluginManager.m */; };
+		1D9787BB0F5F067F0093EA87 /* PythonPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323080F3B74FA0011E197 /* PythonPluginManager.m */; };
+		1D9787BD0F5F068A0093EA87 /* Nu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC323140F3B751A0011E197 /* Nu.framework */; };
 		1DC323110F3B74FA0011E197 /* PluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323040F3B74FA0011E197 /* PluginManager.m */; };
 		1DC323D20F3B77D80011E197 /* ExamplePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323D10F3B77D80011E197 /* ExamplePlugin.m */; };
 		1DC323D30F3B77DB0011E197 /* ExamplePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC323D10F3B77D80011E197 /* ExamplePlugin.m */; };
@@ -154,6 +163,7 @@
 				1DD73C300F3CD9C800552B38 /* Carbon.framework in Frameworks */,
 				1DEF26DA0F4DE93F00F986A2 /* LuaCore.framework in Frameworks */,
 				1D9787380F5EED730093EA87 /* MacRuby.framework in Frameworks */,
+				1D9787BD0F5F068A0093EA87 /* Nu.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,6 +424,14 @@
 				1DC323EC0F3B795E0011E197 /* ExampleController.m in Sources */,
 				1DD73C610F3CFA9F00552B38 /* NSApplication+Applescript.m in Sources */,
 				1DF38D770F3DE9AA00431004 /* RubyPluginManager.m in Sources */,
+				1D9787B30F5F06780093EA87 /* FScriptPlugInManager.m in Sources */,
+				1D9787B40F5F06790093EA87 /* ApplescriptPluginManager.m in Sources */,
+				1D9787B50F5F067A0093EA87 /* JavascriptPluginManager.m in Sources */,
+				1D9787B60F5F067A0093EA87 /* LuaPluginManager.m in Sources */,
+				1D9787B70F5F067B0093EA87 /* NSApplescript+FCSAdditions.m in Sources */,
+				1D9787B80F5F067C0093EA87 /* NuPluginManager.m in Sources */,
+				1D9787B90F5F067D0093EA87 /* ObjCPluginManager.m in Sources */,
+				1D9787BB0F5F067F0093EA87 /* PythonPluginManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +473,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_OBJC_GC = supported;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -481,6 +500,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_GC = supported;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";

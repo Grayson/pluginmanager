@@ -1,55 +1,46 @@
 # How to embed Ruby in Cocoa applications
 
-I have to say at the outset how utterly surprised I was at how easy it is to get Ruby support working in an application.  RubyCocoa really provides the right tools with interacting with Ruby.  Getting Ruby running was almost as easy as reading the header files in the RubyCocoa framework and asking, "What if?"
+Ruby was easily the most difficult language I tried to get working in the PluginManager.  However, most of that difficulty was from working with RubyCocoa.  I want to say again that I like RubyCocoa and want to use it, but it simply wasn't built for embedding, especially with other languages.  Getting full Ruby support meant going with [MacRuby](http://macruby.org).
 
 ## Getting started
 
-The first thing you'll need to do is to load all of the necessary frameworks and libraries.  RubyCocoa is separated from Ruby, so you'll need to link both RubyCocoa (found at /System/Library/Frameworks/RubyCocoa.framework) and libruby (which I found at /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/libruby.1.dylib).  When I tried adding Ruby.framework, Xcode complained that the Ruby framework couldn't be found.
+MacRuby is a complete Ruby system.  There aren't any other requirements.  You can simply drag the MacRuby framework into your application and link it.  Well, you do that and turn on garbage collection.  Simply open your app's target, switch to the "Build" tab, and search for "garbage".  You then need to change the Objective-C Garbage Collection from "Unsupported" to "Supported" or "Required."  Note that this may change your app's behavior, especially in regards to loading external bundles and frameworks.  Once you've turned on GC, you can add the following to your header file:
 
-With the library and framework linked, you'll want to import the RBRuntime header from RubyCocoa into your header file.
+	#import <MacRuby/MacRuby.h>
 
-	#import <RubyCocoa/RBRuntime.h>
+## Ruby isn't hard
 
-## Ruby is easy
+MacRuby doesn't provide as useful convenience methods.  There are some useful stuff, but not quite for what we want to do.  If you use MacRuby's `evaluateFileAtPath:`, you won't receive the script object that we need to work with.  For this, we'll have to delve into Ruby's embedding layer.
 
-The first thing you need to do with Ruby is start it up.  You'll want to load not only Ruby but also RubyCocoa.
+	[MacRuby sharedRuntime];
+	VALUE script = rb_eval_string([[NSString stringWithContentsOfFile:scriptPath] UTF8String]);
 
-	ruby_init();
-	ruby_init_loadpath();
-	RBRubyCocoaInit();
+The first line simply starts the MacRuby runtime.  You can receive a reference to the runtime and use some of MacRuby's convenience methods, but we're not doing that today.  Today, we're calling into scripts.  The second line simply uses rb\_eval_string (excuse the backslash if you're reading this in plain text), to evaluate the script.  The script object is returned as a result.
 
-Now, the part that's surprisingly easy.  Let's say you have the following Ruby script:
+Let's assume that the ruby script just loaded was the following:
 
 	def rubyExample
 	  return "Hi, from Ruby!"
 	end
 	
-	def printMe (param)
-		puts param
+	def printMe (param1, param2)
+		puts param1
+		puts param2
 	end
 
-You can load it using RubyCocoa's RBObject class.  Unfortunately, RBObject isn't readily available.  You could import RubyCocoa/RBObject.h, but that imports RubyCocoa/osx_ruby.h which ran into a long list of compiling errors when I did it.  I didn't want to mess with that, so I call up RBObject using `NSClassFromString`.
+We're going to need to use a bit more of the plain C embedding layer to call into these.  First things first, calling a method is fairly easy.  Ruby provides `rb_funcall`.  It can be used in the following manner:
 
-	Class RBObject = NSClassFromString(@"RBObject");
-	id rb = [RBObject RBObjectWithRubyScriptString:[NSString stringWithContentsOfFile:scriptPath]];
+	VALUE ret = rb_funcall(script, rb_intern("rubyExample"), 0);
+	NSLog(@"%@", RB2OC(ret));
+	
+	rb_funcall(script, rb_intern("printMe"), 2, OC2RB(@"this will be printed"), OC2RB(@"this is param2"));
 
-You now have an NSProxy object called "rb" that represents the ruby script that was just loaded.  This proxy makes it so easy to call into the script.
+There are several `rb_funcall` functions.  This is the basic one.  The first parameter is the object that should be called.  Since we're working with the script object from above, it'll be passed.  The second parameter is Ruby's representation of the method, found using `rb_intern`.  Note that we're using standard C strings (`char *`) and not NSStrings.  The third parameter is the number of arguments to pass.  In the case of no arguments, this will be the last parameter.  However, if there are arguments, they'll simply be passed following this (as noted in the last line).  Objects can be converted from Ruby using `RB2OC` and to Ruby using `OC2RB`.
 
-	NSLog(@"%@", [rb rubyExample]); // This will call the scripts "rubyExample" function
+`rb_funcall` is great if you know exactly how many parameters you will pass (or otherwise like building var_arg lists).  If you'd prefer a more convenient method, `rb_funcall2` may be appropriate.  `rb_funcall2` works pretty much like `rb_funcall` except for it takes 4 arguments (instead of the variable number for `rb_funcall`) where the last argument is a C array of values that represent the arguments to pass to the script.
 
-Could it get easier?  What's better still, RubyCocoa will automatically handle conversion between types.
-
-	[rb printMe:[NSObject new]];
-	[rb printMe:[NSArray arrayWithObject:@"example"]];
-
-NSObject will be converted into an object that Ruby can work with and base types (strings, dictionaries, arrays, etc.) will be automatically converted to their Ruby equivalents.
-
-## A word about compiler warnings
-
-You may notice that if you try to compile the above code, you'll get a lot of compiler warnings.  That's because `RBObjectWithRubyScriptString`, `printMe`, and `rubyExample` aren't defined by any class that the compiler knows about.  You can get around this by using `performSelector:` and the like or you can define simple categories that declare these methods to avoid the warning.
-
-	@interface NSObject (AvoidRubyCocoaWarnings)
-	-(id)RBObjectWithRubyScriptString:(NSString *)script;
-	-(NSString *)rubyExample;
-	-(void)printMe:(id)param;
-	@end
+	VALUE args[2];
+	args[0] = OC2RB(@"this will be printed");
+	args[1] = OC2RB(@"this is param2");
+	rb_funcall2(script, rb_intern("printMe"), 2, args);
+	NSLog(@"%@", RB2OC( rb_funcall2(script, rb_intern("rubyExample"), 0, nil) ));
