@@ -26,6 +26,8 @@
 		[NSString stringWithFormat:@"%@ %@", [me valueForProperty:kABFirstNameProperty], [me valueForProperty:kABLastNameProperty], nil], @"name",
 			array, @"phone", nil];
 	self.me = meDict;
+	
+	[PluginManager pluginsForProperty:@"label-click" forValue:self.me withValue:@"with"];
 }
 
 - (IBAction)showPluginMenu:(id)sender {

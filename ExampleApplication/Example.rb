@@ -1,9 +1,10 @@
 def actionProperty
-  return "label-click"
+  puts "Inside actionProperty"
+  "label-click"
 end
 
 def actionEnable(withValue, forValue)
-  return true
+  true
 end
 
 def actionTitle(withValue, forValue)
@@ -12,4 +13,5 @@ end
 
 def actionPerform(withValue, forValue)
   puts withValue
+  puts forValue
 end
