@@ -18,7 +18,7 @@
 
 +(void)load {
 	NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	if (NSClassFromString(@"RBObject")) [PluginManager registerManager:[[self new] autorelease]];
+	if (NSClassFromString(@"MacRuby")) [PluginManager registerManager:[[self new] autorelease]];
 	[pool release];
 }
 
@@ -26,13 +26,6 @@
 {
 	self = [super init];
 	if (!self) return nil;
-	
-	// Simple initialization of the Ruby runtime and loading of RubyCocoa.
-	// Also RBObject is available in RubyCocoa but isn't made public.  It is loaded dynamically here.
-	ruby_init();
-	ruby_init_loadpath();
-	RBRubyCocoaInit();
-	RBObject = NSClassFromString(@"RBObject");
 	
 	return self;
 }
@@ -46,18 +39,25 @@
 	{
 		// Could it be any easier to load a Ruby script with RubyCocoa?  Simply get a script as an NSString
 		// and load it using RBObjectWithRubyScriptString:.
+		MacRuby *ruby = [MacRuby sharedRuntime];
+		// id x = [ruby evaluateFileAtPath:scriptPath];
+		// NSLog(@"%s %@", _cmd, x);
+		VALUE script = rb_eval_string([[NSString stringWithContentsOfFile:scriptPath] UTF8String]);
+		NSLog(@"%s WTF IS GOING ON?", _cmd);
 		
-		id rb = [RBObject RBObjectWithRubyScriptString:[NSString stringWithContentsOfFile:scriptPath]];
-		if (!rb) continue;
+		VALUE ret = rb_funcall(script, rb_intern("actionPerform"), 2, OC2RB(self), OC2RB(@"asdf"));
+		NSLog(@"%s %@", _cmd, RB2OC(ret));
 		
-		// RBObjects are really NSProxies.  RubyCocoa makes it easy to call functions in a Ruby script
-		// simply by calling the function name as a proxy method.  Here, it'll be calling `actionProperty()`
-		// from the loaded script.
-		NSString *property = [rb actionProperty];
-		NSMutableArray *arr = [plugins objectForKey:property];
-		if (!arr) arr = [NSMutableArray array];
-		[arr addObject:rb];
-		[plugins setObject:arr forKey:property];
+		return;
+		
+		// // RBObjects are really NSProxies.  RubyCocoa makes it easy to call functions in a Ruby script
+		// // simply by calling the function name as a proxy method.  Here, it'll be calling `actionProperty()`
+		// // from the loaded script.
+		// NSString *property = [rb actionProperty];
+		// NSMutableArray *arr = [plugins objectForKey:property];
+		// if (!arr) arr = [NSMutableArray array];
+		// [arr addObject:rb];
+		// [plugins setObject:arr forKey:property];
 	}
 }
 
