@@ -64,6 +64,7 @@ unsigned long ASPluginAppClassCode() {
 		NSAppleEventDescriptor *desc = [NSAppleEventDescriptor appleEventWithEventClass:ASPluginAppClassCode() eventID:ASPluginPropertyEventCode targetDescriptor:procDesc returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
 		id err = nil;
 		NSAppleEventDescriptor *ret = [as executeAppleEvent:desc error:&err];
+		NSLog(@"%s %@", _cmd, err);
 		if (ret)
 		{
 			NSString *property = [ret stringValue];
@@ -79,7 +80,7 @@ unsigned long ASPluginAppClassCode() {
 -(NSArray *)extensions { return [NSArray arrayWithObject:@"scpt"]; }
 -(NSArray *)pluginsForProperty:(NSString *)property forValue:(id)forValue withValue:(id)withValue
 {
-	if ([self plugins]) [self build];
+	if (![self plugins]) [self build];
 	NSArray *arr = [[self plugins] objectForKey:property];
 	if (!arr || ![arr count]) return nil;
 	
@@ -94,6 +95,7 @@ unsigned long ASPluginAppClassCode() {
 	while (as = [e nextObject])
 	{
 		NSAppleEventDescriptor *enabledDesc = [as executeEvent:ASPluginEnableEventCode eventClass:ASPluginAppClassCode() parameters:parameters];
+		NSLog(@"%s %@", _cmd, enabledDesc);
 		if (enabledDesc && [enabledDesc booleanValue])
 		{
 			NSAppleEventDescriptor *desc = [as executeEvent:ASPluginTitleEventCode eventClass:ASPluginAppClassCode() parameters:parameters];
