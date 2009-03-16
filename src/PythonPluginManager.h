@@ -18,6 +18,29 @@ typedef struct {
 	int 	    flags;
 } PyObjCObject;
 
+struct pyobjc_api {
+	int	      api_version;
+	size_t	      struct_len;
+	PyTypeObject* class_type;
+	PyTypeObject* object_type;
+	PyTypeObject* select_type;
+	void *register_method_mapping;
+	int (*register_signature_mapping)(char*, PyObject *(*)(PyObject*, PyObject*, PyObject*), void (*)(void*, void*, void**, void*));
+	id (*obj_get_object)(PyObject*);
+	void (*obj_clear_object)(PyObject*);
+	Class (*cls_get_class)(PyObject*);
+	PyObject* (*cls_to_python)(Class cls);
+	id (*python_to_id)(PyObject*);
+	PyObject* (*id_to_python)(id);
+};
+
+
+typedef id(*PythonToId_t)(PyObject*);
+typedef PyObject*(*IdToPython_t)(id);
+
+PythonToId_t PythonToId;
+IdToPython_t IdToPython;
+
 @interface PythonPluginManager : NSObject <PluginManagerProtocol> {
 	NSMutableDictionary *_plugins;
 }

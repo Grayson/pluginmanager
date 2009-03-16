@@ -10,6 +10,8 @@
 
 // depythonify attempts to turn a PyObject value into its id/Cocoa counterpart.
 id depythonify(PyObject *value) {
+	return PythonToId(value);
+	
 	if (value == nil) return nil;
 	if (PyInt_Check(value) || PyLong_Check(value) || PyBool_Check(value)) 
 		return [NSNumber numberWithLong:PyInt_AsLong(value)];
@@ -46,7 +48,9 @@ id depythonify(PyObject *value) {
 		for (idx = 0; idx < size; idx++) {
 			PyObject *key = PyList_GetItem(keys, idx);
 			PyObject *obj = PyDict_GetItem(value, key);
-			[dict setObject:depythonify(obj) forKey:depythonify(key)];
+			id convertedObj = depythonify(obj);
+			id convertedKey = depythonify(key);
+			if (convertedKey && convertedObj) [dict setObject:convertedObj forKey:convertedKey];
 		}
 		return dict;
 	}
@@ -71,6 +75,7 @@ id depythonify(PyObject *value) {
 // pythonify converts ids to their PyObject values.
 typedef PyObject *(*pyobjcobject_new_t)(id, int, int); // Function signature for PyObjCObject_New.  Used in dynamic lookup.
 PyObject *pythonify(id value) {
+	return IdToPython(value);
 	if (value == nil) return nil;
 	if ([value isKindOfClass:[NSString class]]) return PyString_FromString([value UTF8String]);
 	else if ([value isKindOfClass:[NSNumber class]]) return PyFloat_FromDouble([value doubleValue]);
@@ -107,7 +112,7 @@ PyObject *pythonify(id value) {
 	// On OS X 10.5, the included PyObjC does not expose PyObjCObject_New so we're going to locate it
 	// dynamically using dlsym.
 	pyobjcobject_new_t func;
- 	func = (pyobjcobject_new_t)dlsym(RTLD_DEFAULT, "PyObjCObject_New");
+ 	func = (pyobjcobject_new_t)dlsym(RTLD_NEXT, "PyObjCObject_New");
 	if (!func) {
 		NSLog(@"Could not find PyObjCObject_New.  Error: %s", dlerror());
 		return Py_None;
@@ -177,8 +182,21 @@ PyObject *guaranteedTuple(PyObject *value) {
 		
 		// Load the Python file using PyRun_File and then call the actionProperty() function
 		PyRun_File(pyFile, [path UTF8String], Py_file_input, globals, globals);
+		
+		if (PythonToId == nil) {
+			PyObject *objcModule = PyImport_Import(PyString_FromString("objc"));
+			Py_DECREF(objcModule);
+			if (objcModule == NULL) NSLog(@"%s WTF?", _cmd);
+			PyObject *objcGlobals = PyModule_GetDict(objcModule);
+			PyObject *apiObj = PyDict_GetItemString(objcGlobals, "__C_API__");
+			struct pyobjc_api *pyobjc = PyCObject_AsVoidPtr(apiObj);
+			PythonToId = pyobjc->python_to_id;
+			IdToPython = pyobjc->id_to_python;
+		}
+		
 		NSString *property = [self callFunction:@"actionProperty" ofModule:mainModule arguments:nil];
-				
+		if (!property) continue;
+		
 		NSMutableArray *arr = [plugins objectForKey:property];
 		if (!arr) arr = [NSMutableArray array];
 		[arr addObject:[NSValue valueWithPointer:mainModule]];
@@ -233,6 +251,7 @@ PyObject *guaranteedTuple(PyObject *value) {
 	// Note that this hasn't been tested.  Due to the GIL state, it's possible that this could cause a crash.
 	// More information on GIL states are documented in callFunction:ofModule:arguments:.
 	FILE *pyFile = fopen([path UTF8String], "r");
+	PyImport_ImportModule("objc");
 	PyObject *mainModule = PyImport_AddModule("__main__");
 	PyObject *globals = PyModule_GetDict(mainModule);
 	return depythonify(PyRun_File(pyFile, [path UTF8String], Py_file_input, globals, globals));
@@ -251,7 +270,7 @@ PyObject *guaranteedTuple(PyObject *value) {
 		// will crash with some GIL state error.  Simply using PyGILState_Ensure() and releasing the GIL state after
 		// seems to resolve this issue.
 		PyGILState_STATE state = PyGILState_Ensure();
-		PyObject *pValue = PyObject_CallObject(pFunc, args ? guaranteedTuple(pythonify([NSArray arrayWithObjects:@"", @"", nil])) : nil);
+		PyObject *pValue = PyObject_CallObject(pFunc, args ? guaranteedTuple(pythonify(args)) : nil);
 		if (pValue == nil) PyErr_Print();
 		else ret = depythonify(pValue);
 		Py_XDECREF(pFunc);
