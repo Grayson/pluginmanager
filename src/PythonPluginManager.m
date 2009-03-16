@@ -75,7 +75,6 @@ id depythonify(PyObject *value) {
 // pythonify converts ids to their PyObject values.
 typedef PyObject *(*pyobjcobject_new_t)(id, int, int); // Function signature for PyObjCObject_New.  Used in dynamic lookup.
 PyObject *pythonify(id value) {
-	return IdToPython(value);
 	if (value == nil) return nil;
 	if ([value isKindOfClass:[NSString class]]) return PyString_FromString([value UTF8String]);
 	else if ([value isKindOfClass:[NSNumber class]]) return PyFloat_FromDouble([value doubleValue]);
@@ -109,15 +108,7 @@ PyObject *pythonify(id value) {
 	}
 	else if ([value isKindOfClass:[NSNull class]]) return Py_None;
 	
-	// On OS X 10.5, the included PyObjC does not expose PyObjCObject_New so we're going to locate it
-	// dynamically using dlsym.
-	pyobjcobject_new_t func;
- 	func = (pyobjcobject_new_t)dlsym(RTLD_NEXT, "PyObjCObject_New");
-	if (!func) {
-		NSLog(@"Could not find PyObjCObject_New.  Error: %s", dlerror());
-		return Py_None;
-	}
-	return func(value, 0, NO);
+	return IdToPython(value);
 }
 
 // I suspect that there's some strange interactions if multiple plugins are loaded.
@@ -186,7 +177,6 @@ PyObject *guaranteedTuple(PyObject *value) {
 		if (PythonToId == nil) {
 			PyObject *objcModule = PyImport_Import(PyString_FromString("objc"));
 			Py_DECREF(objcModule);
-			if (objcModule == NULL) NSLog(@"%s WTF?", _cmd);
 			PyObject *objcGlobals = PyModule_GetDict(objcModule);
 			PyObject *apiObj = PyDict_GetItemString(objcGlobals, "__C_API__");
 			struct pyobjc_api *pyobjc = PyCObject_AsVoidPtr(apiObj);
